@@ -1,28 +1,39 @@
-﻿class Greeter {
-    element: HTMLElement;
-    span: HTMLElement;
-    timerToken: number;
+﻿document.addEventListener("DOMContentLoaded", ready);
+function ready() {
+    var canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("game_canvas");
+    var ctx = canvas.getContext('2d');
+    var gameScene = new Scene(canvas, "white");
+    var curScene = gameScene;
 
-    constructor(element: HTMLElement) {
-        this.element = element;
-        this.element.innerHTML += "The time is: ";
-        this.span = document.createElement('span');
-        this.element.appendChild(this.span);
-        this.span.innerText = new Date().toUTCString();
+    curScene.GameObjects.push(new PlayerGameObject(new Point(30, 30), 10, "green"));
+    // resize the canvas to fill browser window dynamically
+    window.addEventListener('resize', resizeCanvas, false);
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        /**
+         * Your drawings need to be inside this function otherwise they will be reset when 
+         * you resize the browser window and the canvas goes will be cleared.
+         */
+        drawStuff();
     }
+    resizeCanvas();
 
-    start() {
-        this.timerToken = setInterval(() => this.span.innerHTML = new Date().toUTCString(), 500);
+    function drawStuff() {
+        curScene.DrawObjects();
     }
+    var lastTime = Date.now();
+    function GameLoop() {
+        var now = Date.now();
+        var dT = (now - lastTime) / 1000.0;
 
-    stop() {
-        clearTimeout(this.timerToken);
-    }
+        curScene.UpdateObjects(dT);
+        curScene.DrawObjects();
 
+        lastTime = now;
+        window.requestAnimationFrame(GameLoop);
+    };
+    window.requestAnimationFrame(GameLoop);
 }
-
-window.onload = () => {
-    var el = document.getElementById('content');
-    var greeter = new Greeter(el);
-    greeter.start();
-};
