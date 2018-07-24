@@ -85,6 +85,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="GameObject.ts" />
+    <TypeScriptCompile Include="Key.enum.ts" />
     <TypeScriptCompile Include="Scene.ts" />
   </ItemGroup>
   <ItemGroup>

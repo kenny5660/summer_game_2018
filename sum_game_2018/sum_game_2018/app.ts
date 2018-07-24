@@ -4,8 +4,17 @@ function ready() {
     var ctx = canvas.getContext('2d');
     var gameScene = new Scene(canvas, "white");
     var curScene = gameScene;
-
-    curScene.GameObjects.push(new PlayerGameObject(new Point(30, 30), 10, "green"));
+    var player = new PlayerGameObject(new Point(30, 30), 20, "green");
+    curScene.GameObjects.push(player);
+    addEventListener("keydown",KeyBoardListener_keydown);
+    addEventListener("keyup", KeyBoardListener_keyup);
+    function KeyBoardListener_keydown(e: KeyboardEvent) {
+        player.keydown(e);
+    }
+    function KeyBoardListener_keyup(e: KeyboardEvent) {
+        player.keyup(e);
+    }
+  
     // resize the canvas to fill browser window dynamically
     window.addEventListener('resize', resizeCanvas, false);
 
