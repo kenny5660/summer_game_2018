@@ -21,9 +21,9 @@ class PlayerGameObject extends GameObject implements KeyBoardListener {
     Size: number;
     Color: string;
     Speed: Point;
-    MaxSpeed: number = 100;
-    SpeedUp: number = 100;
-    SpeedDown: number = 150;
+    MaxSpeed: number = 150;
+    SpeedUp: number = 170;
+    SpeedDown: number = 200;
     VectorSpeedUp: Point;
     constructor(pos: Point, Size: number, Color: string) {
         super();
@@ -35,30 +35,30 @@ class PlayerGameObject extends GameObject implements KeyBoardListener {
     }
     keydown(e: KeyboardEvent) {
         if (e.keyCode == Key.UpArrow) {
-            this.VectorSpeedUp.Y = this.VectorSpeedUp.Y <= -1 ? -1 : this.VectorSpeedUp.Y - 1;
+            this.VectorSpeedUp.Y = -1;
         }
         if (e.keyCode == Key.DownArrow) {
-            this.VectorSpeedUp.Y = this.VectorSpeedUp.Y >= 1 ? 1 : this.VectorSpeedUp.Y + 1;
+            this.VectorSpeedUp.Y =  1;
         }
         if (e.keyCode == Key.RightArrow) {
-            this.VectorSpeedUp.X = this.VectorSpeedUp.X >= 1 ? 1 : this.VectorSpeedUp.X + 1;
+            this.VectorSpeedUp.X = 1;
         }
         if (e.keyCode == Key.LeftArrow) {
-            this.VectorSpeedUp.X = this.VectorSpeedUp.X <= -1 ? -1 : this.VectorSpeedUp.X - 1;
+            this.VectorSpeedUp.X = -1;
         }
     }
     keyup(e: KeyboardEvent) {
         if (e.keyCode == Key.DownArrow) {
-            this.VectorSpeedUp.Y = this.VectorSpeedUp.Y <= -1 ? -1 : this.VectorSpeedUp.Y - 1;
+            this.VectorSpeedUp.Y =0;
         }
         if (e.keyCode == Key.UpArrow) {
-            this.VectorSpeedUp.Y = this.VectorSpeedUp.Y >= 1 ? 1 : this.VectorSpeedUp.Y + 1;
+            this.VectorSpeedUp.Y = 0;
         }
         if (e.keyCode == Key.LeftArrow) {
-            this.VectorSpeedUp.X = this.VectorSpeedUp.X >= 1 ? 1 : this.VectorSpeedUp.X + 1;
+            this.VectorSpeedUp.X = 0;
         }
         if (e.keyCode == Key.RightArrow) {
-            this.VectorSpeedUp.X = this.VectorSpeedUp.X <= -1 ? -1 : this.VectorSpeedUp.X - 1;
+            this.VectorSpeedUp.X = 0;
         }
     }
 
@@ -79,7 +79,7 @@ class PlayerGameObject extends GameObject implements KeyBoardListener {
         if (this.VectorSpeedUp.Y == 0) {
             this.Speed.Y = this.Speed.Y > 0 ? this.Speed.Y - this.SpeedDown * dT : this.Speed.Y;
             this.Speed.Y = this.Speed.Y < 0 ? this.Speed.Y + this.SpeedDown * dT : this.Speed.Y;
-        }
+            }
         this.pos.X += this.Speed.X * dT;
         this.pos.Y += this.Speed.Y * dT;
     }
