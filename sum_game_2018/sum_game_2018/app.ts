@@ -39,3 +39,5 @@ function ready() {
     };
     window.requestAnimationFrame(GameLoop);
 }
+//efegerger
+////vsvdsvsdvsdv
