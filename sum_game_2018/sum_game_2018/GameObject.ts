@@ -2,7 +2,24 @@
     keydown(e: KeyboardEvent);
     keyup(e: KeyboardEvent);
 }
-
+function sign(x: number): number { return x ? x < 0 ? -1 : 1 : 0; }
+class Vector {
+    X: number;
+    Y: number;
+    constructor(X: number, Y: number) {
+        this.X = X;
+        this.Y = Y;
+    }
+    sub(b: Vector): Vector {
+        return new Vector(this.X - b.X, this.Y - b.Y)
+    }
+    normalize(): Vector {
+        var d = Math.sqrt(this.X * this.X + this.Y * this.Y);
+        this.X /= d;
+        this.Y /= d;
+        return this;
+    }
+}
 class Point {
     X: number;
     Y: number;
@@ -20,18 +37,36 @@ class PlayerGameObject extends GameObject implements KeyBoardListener {
     pos: Point;
     Size: number;
     Color: string;
-    Speed: Point;
+    Speed: Vector;
     MaxSpeed: number = 150;
     SpeedUp: number = 170;
     SpeedDown: number = 200;
-    VectorSpeedUp: Point;
+    VectorSpeedUp: Vector;
     constructor(pos: Point, Size: number, Color: string) {
         super();
         this.Size = Size;
         this.Color = Color;
         this.pos = pos;
-        this.VectorSpeedUp = new Point(0, 0);
-        this.Speed = new Point(0, 0);
+        this.VectorSpeedUp = new Vector(0, 0);
+        this.Speed = new Vector(0, 0);
+        var input = this;
+        addEventListener("keydown", KeyBoardListener_keydown);
+        addEventListener("keyup", KeyBoardListener_keyup);
+        addEventListener("mousemove", MouseListener_Move);
+        function KeyBoardListener_keydown(e: KeyboardEvent) {
+            input.keydown(e);
+        }
+        function MouseListener_Move(e: MouseEvent) {
+            input.mouseMove(e);
+        }
+        function KeyBoardListener_keyup(e: KeyboardEvent) {
+            input.keyup(e);
+        }
+    }
+    mouseMove(e: MouseEvent) {
+        var mouseVector = new Vector(e.x, e.y);
+        var playerVector = new Vector(this.pos.X, this.pos.Y);
+        this.VectorSpeedUp = mouseVector.sub(playerVector).normalize();
     }
     keydown(e: KeyboardEvent) {
         if (e.keyCode == Key.UpArrow) {
@@ -70,8 +105,8 @@ class PlayerGameObject extends GameObject implements KeyBoardListener {
         ctx.fill();
     }
     Update(dT: number) {
-        this.Speed.X = this.Speed.X <= this.MaxSpeed && this.Speed.X >= -this.MaxSpeed  ? this.Speed.X + this.SpeedUp * this.VectorSpeedUp.X * dT : this.Speed.X;
-        this.Speed.Y = this.Speed.Y <= this.MaxSpeed && this.Speed.Y >= -this.MaxSpeed ? this.Speed.Y + this.SpeedUp * this.VectorSpeedUp.Y * dT : this.Speed.Y;
+        this.Speed.X = this.Speed.X <= this.MaxSpeed && this.Speed.X >= -this.MaxSpeed ? this.Speed.X + this.SpeedUp * this.VectorSpeedUp.X * dT : this.MaxSpeed * sign(this.Speed.X);
+        this.Speed.Y = this.Speed.Y <= this.MaxSpeed && this.Speed.Y >= -this.MaxSpeed ? this.Speed.Y + this.SpeedUp * this.VectorSpeedUp.Y * dT : this.MaxSpeed * sign(this.Speed.Y);
         if (this.VectorSpeedUp.X == 0) {
             this.Speed.X = this.Speed.X > 0 ? this.Speed.X - this.SpeedDown * dT : this.Speed.X;
             this.Speed.X = this.Speed.X < 0 ? this.Speed.X + this.SpeedDown * dT : this.Speed.X;

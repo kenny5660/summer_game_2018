@@ -2,6 +2,14 @@ interface KeyBoardListener {
     keydown(e: KeyboardEvent): any;
     keyup(e: KeyboardEvent): any;
 }
+declare function sign(x: number): number;
+declare class Vector {
+    X: number;
+    Y: number;
+    constructor(X: number, Y: number);
+    sub(b: Vector): Vector;
+    normalize(): Vector;
+}
 declare class Point {
     X: number;
     Y: number;
@@ -15,12 +23,13 @@ declare class PlayerGameObject extends GameObject implements KeyBoardListener {
     pos: Point;
     Size: number;
     Color: string;
-    Speed: Point;
+    Speed: Vector;
     MaxSpeed: number;
     SpeedUp: number;
     SpeedDown: number;
-    VectorSpeedUp: Point;
+    VectorSpeedUp: Vector;
     constructor(pos: Point, Size: number, Color: string);
+    mouseMove(e: MouseEvent): void;
     keydown(e: KeyboardEvent): void;
     keyup(e: KeyboardEvent): void;
     Draw(ctx: CanvasRenderingContext2D): void;
