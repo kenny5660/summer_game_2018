@@ -6,14 +6,14 @@ function ready() {
     var curScene = gameScene;
     var player = new PlayerGameObject(new Point(30, 30), 20, "green");
     curScene.GameObjects.push(player);
-    addEventListener("keydown",KeyBoardListener_keydown);
-    addEventListener("keyup", KeyBoardListener_keyup);
-    function KeyBoardListener_keydown(e: KeyboardEvent) {
-        player.keydown(e);
-    }
-    function KeyBoardListener_keyup(e: KeyboardEvent) {
-        player.keyup(e);
-    }
+    //addEventListener("keydown", KeyBoardListener_keydown);
+    //addEventListener("keyup", KeyBoardListener_keyup);
+    //function KeyBoardListener_keydown(e: KeyboardEvent) {
+    //    player.keydown(e);
+    //}
+    //function KeyBoardListener_keyup(e: KeyboardEvent) {
+    //    player.keyup(e);
+    //}
   
     window.addEventListener('resize', resizeCanvas, false);
     function resizeCanvas() {
@@ -38,7 +38,4 @@ function ready() {
         window.requestAnimationFrame(GameLoop);
     };
     window.requestAnimationFrame(GameLoop);
-    //123
 }
-//efegerger
-////vsvdsvsdvsdv
