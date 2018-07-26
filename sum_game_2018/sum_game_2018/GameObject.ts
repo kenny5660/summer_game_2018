@@ -19,13 +19,26 @@ class Vector {
         this.Y /= d;
         return this;
     }
+
 }
 class Point {
     X: number;
     Y: number;
+    static globalOffset = new Point(0,0);
+    static globalScale = 1;
     constructor(X: number, Y: number) {
         this.X = X;
         this.Y = Y;
+    }
+    toWorld_Point(): Point{
+        var X = (this.X + Point.globalOffset.X) / Point.globalScale;
+        var Y = (this.Y + Point.globalOffset.Y) / Point.globalScale;
+        return new Point(X, Y);
+    }
+    toCanvas_Point(): Point {
+        var X = Math.round(this.X * Point.globalScale) + Point.globalOffset.X;
+        var Y = Math.round(this.Y * Point.globalScale) + Point.globalOffset.Y;
+        return new Point(X,Y);
     }
 }
 abstract class GameObject {
@@ -65,7 +78,8 @@ class PlayerGameObject extends GameObject implements KeyBoardListener {
     }
     mouseMove(e: MouseEvent) {
         var mouseVector = new Vector(e.x, e.y);
-        var playerVector = new Vector(this.pos.X, this.pos.Y);
+        var canvasPos = this.pos.toCanvas_Point();
+        var playerVector = new Vector(canvasPos.X, canvasPos.Y);
         this.VectorSpeedUp = mouseVector.sub(playerVector).normalize();
     }
     keydown(e: KeyboardEvent) {
@@ -95,12 +109,17 @@ class PlayerGameObject extends GameObject implements KeyBoardListener {
         if (e.keyCode == Key.RightArrow) {
             this.VectorSpeedUp.X = 0;
         }
+        if (e.keyCode == Key.R) {
+            Point.globalScale = 0.5;
+        }
     }
 
     Draw(ctx: CanvasRenderingContext2D) {
+        var canvasPos = this.pos.toCanvas_Point();
+        var canvasSize = this.Size * Point.globalScale;
         ctx.fillStyle = this.Color;
         ctx.beginPath();
-        ctx.arc(this.pos.X, this.pos.Y, this.Size, 0, 2 * Math.PI, false);
+        ctx.arc(canvasPos.X, canvasPos.Y, canvasSize, 0, 2 * Math.PI, false);
         ctx.closePath();
         ctx.fill();
     }

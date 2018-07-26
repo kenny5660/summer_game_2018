@@ -13,7 +13,11 @@ declare class Vector {
 declare class Point {
     X: number;
     Y: number;
+    static globalOffset: Point;
+    static globalScale: number;
     constructor(X: number, Y: number);
+    toWorld_Point(): Point;
+    toCanvas_Point(): Point;
 }
 declare abstract class GameObject {
     abstract Draw(ctx: CanvasRenderingContext2D): any;
