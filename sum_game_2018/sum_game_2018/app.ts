@@ -3,9 +3,17 @@ function ready() {
     var canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("game_canvas");
     var ctx = canvas.getContext('2d');
     var gameScene = new Scene(canvas, "white");
-    var curScene = gameScene;
+    var mainMenuScene = new Scene(canvas, "grey");
+  //  var curScene = gameScene;
+    var curScene = mainMenuScene;
+    var startButton = new MenuButton("START", new Point(300, 300));
+    startButton.width = 400;
+    startButton.height = 150;
+    startButton.fontSize = 5;
+    mainMenuScene.GameObjects.push(startButton);
+    mainMenuScene.GameObjects.push(new MenuButton("EXIT", new Point(400, 490)));
     var player = new PlayerGameObject(new Point(30, 30), 20, "green");
-    curScene.GameObjects.push(player);
+    gameScene.GameObjects.push(player);
     addEventListener("keydown",KeyBoardListener_keydown);
     addEventListener("keyup", KeyBoardListener_keyup);
     function KeyBoardListener_keydown(e: KeyboardEvent) {
@@ -38,7 +46,4 @@ function ready() {
         window.requestAnimationFrame(GameLoop);
     };
     window.requestAnimationFrame(GameLoop);
-    //123
 }
-//efegerger
-////vsvdsvsdvsdv
