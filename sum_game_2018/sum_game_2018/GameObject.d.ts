@@ -32,10 +32,19 @@ declare class PlayerGameObject extends GameObject implements KeyBoardListener {
     SpeedUp: number;
     SpeedDown: number;
     VectorSpeedUp: Vector;
-    constructor(pos: Point, Size: number, Color: string);
+    canvas: HTMLCanvasElement;
+    constructor(canvas: HTMLCanvasElement, Color: string);
     mouseMove(e: MouseEvent): void;
     keydown(e: KeyboardEvent): void;
     keyup(e: KeyboardEvent): void;
+    Draw(ctx: CanvasRenderingContext2D): void;
+    Update(dT: number): void;
+}
+declare class eatedObject extends GameObject {
+    pos: Point;
+    Size: number;
+    Color: string;
+    constructor(pos: Point, Size: number, Color: string);
     Draw(ctx: CanvasRenderingContext2D): void;
     Update(dT: number): void;
 }

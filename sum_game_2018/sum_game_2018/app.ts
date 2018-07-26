@@ -1,10 +1,12 @@
 ﻿document.addEventListener("DOMContentLoaded", ready);
 function ready() {
     var canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("game_canvas");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
     var ctx = canvas.getContext('2d');
     var gameScene = new Scene(canvas, "white");
     var curScene = gameScene;
-    var player = new PlayerGameObject(new Point(30, 30), 20, "green");
+    var player = new PlayerGameObject(canvas, "green");
     curScene.GameObjects.push(player);
     //addEventListener("keydown", KeyBoardListener_keydown);
     //addEventListener("keyup", KeyBoardListener_keyup);
@@ -22,6 +24,7 @@ function ready() {
         drawStuff();
     }
     resizeCanvas();
+
 
     function drawStuff() {
         curScene.DrawObjects();

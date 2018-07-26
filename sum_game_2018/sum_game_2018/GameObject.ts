@@ -55,11 +55,13 @@ class PlayerGameObject extends GameObject implements KeyBoardListener {
     SpeedUp: number = 170;
     SpeedDown: number = 200;
     VectorSpeedUp: Vector;
-    constructor(pos: Point, Size: number, Color: string) {
+    canvas: HTMLCanvasElement;
+    constructor(canvas: HTMLCanvasElement, Color: string) {
         super();
-        this.Size = Size;
+        this.canvas = canvas;
+        this.Size = GameConfig.startPlayerSize;
         this.Color = Color;
-        this.pos = pos;
+        this.pos = new Point(canvas.width / 2, canvas.height / 2).toWorld_Point();
         this.VectorSpeedUp = new Vector(0, 0);
         this.Speed = new Vector(0, 0);
         var input = this;
@@ -80,7 +82,7 @@ class PlayerGameObject extends GameObject implements KeyBoardListener {
         var mouseVector = new Vector(e.x, e.y);
         var canvasPos = this.pos.toCanvas_Point();
         var playerVector = new Vector(canvasPos.X, canvasPos.Y);
-        this.VectorSpeedUp = mouseVector.sub(playerVector).normalize();
+    //    this.VectorSpeedUp = mouseVector.sub(playerVector).normalize();
     }
     keydown(e: KeyboardEvent) {
         if (e.keyCode == Key.UpArrow) {
@@ -133,8 +135,32 @@ class PlayerGameObject extends GameObject implements KeyBoardListener {
         if (this.VectorSpeedUp.Y == 0) {
             this.Speed.Y = this.Speed.Y > 0 ? this.Speed.Y - this.SpeedDown * dT : this.Speed.Y;
             this.Speed.Y = this.Speed.Y < 0 ? this.Speed.Y + this.SpeedDown * dT : this.Speed.Y;
-            }
-        this.pos.X += this.Speed.X * dT;
-        this.pos.Y += this.Speed.Y * dT;
+        }
+        Point.globalOffset.X += this.Speed.X * dT;
+        Point.globalOffset.Y += this.Speed.Y * dT;
+        this.pos = new Point(this.canvas.width / 2, this.canvas.height / 2).toWorld_Point();
+    }
+}
+
+class eatedObject extends GameObject {
+    pos: Point;
+    Size: number;
+    Color: string;
+    constructor(pos:Point,Size: number,Color: string) {
+        super();
+        this.Size = Size;
+        this.pos = pos;
+        this.Color = Color;
+    }
+    Draw(ctx: CanvasRenderingContext2D) {
+        var canvasPos = this.pos.toCanvas_Point();
+        var canvasSize = this.Size * Point.globalScale;
+        ctx.fillStyle = this.Color;
+        ctx.beginPath();
+        ctx.arc(canvasPos.X, canvasPos.Y, canvasSize, 0, 2 * Math.PI, false);
+        ctx.closePath();
+        ctx.fill();
+    }
+    Update(dT: number) {
     }
 }
