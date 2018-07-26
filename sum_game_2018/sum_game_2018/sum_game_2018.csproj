@@ -87,6 +87,7 @@
     <TypeScriptCompile Include="GameConfig.ts" />
     <TypeScriptCompile Include="GameObject.ts" />
     <TypeScriptCompile Include="Key.enum.ts" />
+    <TypeScriptCompile Include="mainMenu.ts" />
     <TypeScriptCompile Include="Scene.ts" />
   </ItemGroup>
   <ItemGroup>
