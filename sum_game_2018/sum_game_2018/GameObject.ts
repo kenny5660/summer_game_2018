@@ -59,6 +59,7 @@ abstract class Eater extends GameObject {
     SpeedDown: number = GameConfig.startEaterSpeedDown;
     VectorSpeedUp: Vector;
     canvas: HTMLCanvasElement;
+    fontSize: number = GameConfig.eaterSizeTextFontSize;
 }
 class PlayerGameObject extends Eater {
     constructor(canvas: HTMLCanvasElement, Color: string) {
@@ -121,11 +122,17 @@ class PlayerGameObject extends Eater {
     Draw(ctx: CanvasRenderingContext2D) {
         var canvasPos = this.pos.toCanvas_Point();// new Point(this.pos.X * Point.globalScale, this.pos.Y * Point.globalScale);
         var canvasSize = this.Size * Point.globalScale;
+
         ctx.fillStyle = this.Color;
         ctx.beginPath();
         ctx.arc(canvasPos.X, canvasPos.Y, canvasSize, 0, 2 * Math.PI, false);
         ctx.closePath();
         ctx.fill();
+        ctx.font = Math.floor(this.fontSize * Point.globalScale) + "px " + GameConfig.eaterSizeTextFont;
+        ctx.textAlign = "middle";
+        ctx.fillStyle = GameConfig.eaterSizeTextFontColor;
+        var posText = new Point(this.pos.toCanvas_Point().X - ctx.measureText(this.Size.toString()).width / 2, this.pos.toCanvas_Point().Y + this.fontSize * Point.globalScale/2);
+        ctx.fillText(this.Size.toString(), posText.X, posText.Y);
     }
     Update(dT: number) {
         this.Speed.X = this.Speed.X <= this.MaxSpeed && this.Speed.X >= -this.MaxSpeed ? this.Speed.X + this.SpeedUp * this.VectorSpeedUp.X * dT : this.MaxSpeed * sign(this.Speed.X);

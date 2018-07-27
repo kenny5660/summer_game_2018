@@ -66,8 +66,8 @@ class SceneGame extends Scene {
         var player = new PlayerGameObject(canvas, "green");
         this.eaters.push(player);
         gameCamera.setFollowObject(player);
-        for (var i = 0; i < 20; i++) {
-            this.foods.push(new Food(new Point(Math.abs(Math.random() * canvas.width), Math.abs(Math.random() * canvas.height)), GameConfig.eatedSize, "purple"));
+        for (var i = 0; i < 5000; i++) {
+            this.foods.push(new Food(new Point(Math.abs(Math.random() * 5000), Math.abs(Math.random() * 5000)), GameConfig.foodSize, "purple"));
         }
 
     }
