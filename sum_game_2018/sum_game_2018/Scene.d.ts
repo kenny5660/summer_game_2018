@@ -11,11 +11,22 @@ declare class Camera {
 }
 declare class Scene {
     Canvas: HTMLCanvasElement;
-    BackgroundColor: string;
-    private ctx;
+    BackgroundColor: string | CanvasPattern;
+    protected ctx: CanvasRenderingContext2D;
     GameObjects: GameObject[];
     Camera: Camera;
-    constructor(canvas: HTMLCanvasElement, Camera: Camera, backgroundColor: string);
+    constructor(canvas: HTMLCanvasElement, Camera: Camera, backgroundColor: string | CanvasPattern);
     UpdateObjects(dT: number): void;
     DrawObjects(): void;
+}
+declare class SceneGame extends Scene {
+    eaters: Eater[];
+    foods: Food[];
+    constructor(canvas: HTMLCanvasElement, backgroundColor: string | CanvasPattern);
+    UpdateObjects(dT: number): void;
+    DrawObjects(): void;
+    private collisions();
+}
+declare class Collisions {
+    static CircleInCircle(posA: Point, rA: number, posB: Point, rB: number): boolean;
 }

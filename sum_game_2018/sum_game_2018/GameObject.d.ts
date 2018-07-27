@@ -1,7 +1,3 @@
-interface KeyBoardListener {
-    keydown(e: KeyboardEvent): any;
-    keyup(e: KeyboardEvent): any;
-}
 declare function sign(x: number): number;
 declare class Vector {
     X: number;
@@ -25,7 +21,7 @@ declare abstract class GameObject {
     abstract Draw(ctx: CanvasRenderingContext2D): any;
     abstract Update(dT: number): any;
 }
-declare class PlayerGameObject extends GameObject implements KeyBoardListener {
+declare abstract class Eater extends GameObject {
     Size: number;
     Color: string;
     Speed: Vector;
@@ -34,6 +30,8 @@ declare class PlayerGameObject extends GameObject implements KeyBoardListener {
     SpeedDown: number;
     VectorSpeedUp: Vector;
     canvas: HTMLCanvasElement;
+}
+declare class PlayerGameObject extends Eater {
     constructor(canvas: HTMLCanvasElement, Color: string);
     mouseMove(e: MouseEvent): void;
     keydown(e: KeyboardEvent): void;
@@ -41,9 +39,10 @@ declare class PlayerGameObject extends GameObject implements KeyBoardListener {
     Draw(ctx: CanvasRenderingContext2D): void;
     Update(dT: number): void;
 }
-declare class eatedObject extends GameObject {
+declare class Food extends GameObject {
     Size: number;
     Color: string;
+    Cost: number;
     constructor(pos: Point, Size: number, Color: string);
     Draw(ctx: CanvasRenderingContext2D): void;
     Update(dT: number): void;

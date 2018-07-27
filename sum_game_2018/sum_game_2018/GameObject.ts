@@ -1,8 +1,4 @@
-﻿interface KeyBoardListener {
-    keydown(e: KeyboardEvent);
-    keyup(e: KeyboardEvent);
-}
-function sign(x: number): number { return x ? x < 0 ? -1 : 1 : 0; }
+﻿function sign(x: number): number { return x ? x < 0 ? -1 : 1 : 0; }
 class Vector {
     X: number;
     Y: number;
@@ -54,20 +50,21 @@ abstract class GameObject {
     abstract Draw(ctx: CanvasRenderingContext2D);
     abstract Update(dT: number);
 }
-class PlayerGameObject extends GameObject implements KeyBoardListener {
-  
+abstract class Eater extends GameObject {
     Size: number;
     Color: string;
     Speed: Vector;
-    MaxSpeed: number = 150;
-    SpeedUp: number = 170;
-    SpeedDown: number = 200;
+    MaxSpeed: number = GameConfig.startEaterMaxSpeed;
+    SpeedUp: number = GameConfig.startEaterSpeedUp;
+    SpeedDown: number = GameConfig.startEaterSpeedDown;
     VectorSpeedUp: Vector;
     canvas: HTMLCanvasElement;
+}
+class PlayerGameObject extends Eater {
     constructor(canvas: HTMLCanvasElement, Color: string) {
         super();
         this.canvas = canvas;
-        this.Size = GameConfig.startPlayerSize;
+        this.Size = GameConfig.startEaterSize;
         this.Color = Color;
         this.pos = new Point(canvas.width / 2, canvas.height / 2).toWorld_Point();
         this.VectorSpeedUp = new Vector(0, 0);
@@ -90,7 +87,7 @@ class PlayerGameObject extends GameObject implements KeyBoardListener {
         var mouseVector = new Vector(e.x, e.y);
         var canvasPos = this.pos.toCanvas_Point();
         var playerVector = new Vector(canvasPos.X, canvasPos.Y);
-    //    this.VectorSpeedUp = mouseVector.sub(playerVector).normalize();
+        this.VectorSpeedUp = mouseVector.sub(playerVector).normalize();
     }
     keydown(e: KeyboardEvent) {
         if (e.keyCode == Key.UpArrow) {
@@ -146,9 +143,10 @@ class PlayerGameObject extends GameObject implements KeyBoardListener {
     }
 }
 
-class eatedObject extends GameObject {
+class Food extends GameObject {
     Size: number;
     Color: string;
+    Cost: number;
     constructor(pos:Point,Size: number,Color: string) {
         super();
         this.Size = Size;
