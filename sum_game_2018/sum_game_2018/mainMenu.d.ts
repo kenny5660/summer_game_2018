@@ -1,5 +1,4 @@
 declare class MenuButton extends GameObject {
-    pos: Point;
     width: number;
     height: number;
     color: string;

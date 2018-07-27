@@ -4,11 +4,15 @@ function ready() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     var ctx = canvas.getContext('2d');
-    var gameScene = new Scene(canvas, "white");
+    var gameCamera = new Camera(canvas, new Point(0, 0), GameConfig.defaultCanvasWidth, GameConfig.defaultCanvasHeght);
+    var gameScene = new Scene(canvas, gameCamera, "white");
     var curScene = gameScene;
     var player = new PlayerGameObject(canvas, "green");
     curScene.GameObjects.push(player);
-    var mainMenuScene = new Scene(canvas, "grey");
+
+    gameCamera.setFollowObject(player);
+    var mainMenuScene = new Scene(canvas, new Camera(canvas, new Point(0, 0), GameConfig.defaultCanvasWidth, GameConfig.defaultCanvasHeght), "grey");
+
     var curScene = gameScene;
    // var curScene = mainMenuScene;
     var startButton = new MenuButton("START", new Point(300, 300));
@@ -29,6 +33,7 @@ function ready() {
     function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        
         drawStuff();
     }
     resizeCanvas();

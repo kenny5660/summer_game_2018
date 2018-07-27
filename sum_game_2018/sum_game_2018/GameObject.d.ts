@@ -16,15 +16,16 @@ declare class Point {
     static globalOffset: Point;
     static globalScale: number;
     constructor(X: number, Y: number);
+    static zoom(newScale: number, scalePoint: Point): void;
     toWorld_Point(): Point;
     toCanvas_Point(): Point;
 }
 declare abstract class GameObject {
+    pos: Point;
     abstract Draw(ctx: CanvasRenderingContext2D): any;
     abstract Update(dT: number): any;
 }
 declare class PlayerGameObject extends GameObject implements KeyBoardListener {
-    pos: Point;
     Size: number;
     Color: string;
     Speed: Vector;
@@ -41,7 +42,6 @@ declare class PlayerGameObject extends GameObject implements KeyBoardListener {
     Update(dT: number): void;
 }
 declare class eatedObject extends GameObject {
-    pos: Point;
     Size: number;
     Color: string;
     constructor(pos: Point, Size: number, Color: string);

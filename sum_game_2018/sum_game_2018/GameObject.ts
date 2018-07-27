@@ -30,24 +30,32 @@ class Point {
         this.X = X;
         this.Y = Y;
     }
+    static zoom(newScale: number, scalePoint: Point) {
+        var dScale = this.globalScale - newScale;
+
+        this.globalScale = newScale;
+        //this.globalOffset = new Point(
+        //    Math.round((this.globalOffset.X - scalePoint.X) * this.globalScale / (this.globalScale + dScale)) + scalePoint.X,
+        //    Math.round((this.globalOffset.Y - scalePoint.Y) * this.globalScale / (this.globalScale + dScale)) + scalePoint.Y);
+    }
     toWorld_Point(): Point{
         var X = (this.X + Point.globalOffset.X) / Point.globalScale;
         var Y = (this.Y + Point.globalOffset.Y) / Point.globalScale;
         return new Point(X, Y);
     }
     toCanvas_Point(): Point {
-        var X = Math.round(this.X * Point.globalScale) + Point.globalOffset.X;
-        var Y = Math.round(this.Y * Point.globalScale) + Point.globalOffset.Y;
+        var X = Math.floor(this.X * Point.globalScale) + Point.globalOffset.X;
+        var Y = Math.floor(this.Y * Point.globalScale) + Point.globalOffset.Y;
         return new Point(X,Y);
     }
 }
 abstract class GameObject {
-
+    pos: Point;
     abstract Draw(ctx: CanvasRenderingContext2D);
     abstract Update(dT: number);
 }
 class PlayerGameObject extends GameObject implements KeyBoardListener {
-    pos: Point;
+  
     Size: number;
     Color: string;
     Speed: Vector;
@@ -111,13 +119,10 @@ class PlayerGameObject extends GameObject implements KeyBoardListener {
         if (e.keyCode == Key.RightArrow) {
             this.VectorSpeedUp.X = 0;
         }
-        if (e.keyCode == Key.R) {
-            Point.globalScale = 0.5;
-        }
     }
 
     Draw(ctx: CanvasRenderingContext2D) {
-        var canvasPos = this.pos.toCanvas_Point();
+        var canvasPos = this.pos.toCanvas_Point();// new Point(this.pos.X * Point.globalScale, this.pos.Y * Point.globalScale);
         var canvasSize = this.Size * Point.globalScale;
         ctx.fillStyle = this.Color;
         ctx.beginPath();
@@ -136,14 +141,12 @@ class PlayerGameObject extends GameObject implements KeyBoardListener {
             this.Speed.Y = this.Speed.Y > 0 ? this.Speed.Y - this.SpeedDown * dT : this.Speed.Y;
             this.Speed.Y = this.Speed.Y < 0 ? this.Speed.Y + this.SpeedDown * dT : this.Speed.Y;
         }
-        Point.globalOffset.X += this.Speed.X * dT;
-        Point.globalOffset.Y += this.Speed.Y * dT;
-        this.pos = new Point(this.canvas.width / 2, this.canvas.height / 2).toWorld_Point();
+        this.pos.X += this.Speed.X * dT;
+        this.pos.Y += this.Speed.Y * dT;      
     }
 }
 
 class eatedObject extends GameObject {
-    pos: Point;
     Size: number;
     Color: string;
     constructor(pos:Point,Size: number,Color: string) {
