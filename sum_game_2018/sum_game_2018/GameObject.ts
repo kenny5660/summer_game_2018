@@ -59,15 +59,15 @@ abstract class Eater extends GameObject {
     SpeedDown: number = GameConfig.startEaterSpeedDown;
     VectorSpeedUp: Vector;
     canvas: HTMLCanvasElement;
-    fontSize: number = GameConfig.eaterSizeTextFontSize;
 }
 class PlayerGameObject extends Eater {
-    constructor(canvas: HTMLCanvasElement, Color: string) {
+    
+    constructor(canvas: HTMLCanvasElement, pos: Point, Color: string) {
         super();
         this.canvas = canvas;
         this.Size = GameConfig.startEaterSize;
         this.Color = Color;
-        this.pos = new Point(canvas.width / 2, canvas.height / 2).toWorld_Point();
+        this.pos = pos;
         this.VectorSpeedUp = new Vector(0, 0);
         this.Speed = new Vector(0, 0);
         var input = this;
@@ -128,11 +128,11 @@ class PlayerGameObject extends Eater {
         ctx.arc(canvasPos.X, canvasPos.Y, canvasSize, 0, 2 * Math.PI, false);
         ctx.closePath();
         ctx.fill();
-        ctx.font = Math.floor(this.fontSize * Point.globalScale) + "px " + GameConfig.eaterSizeTextFont;
+        ctx.font = Math.floor(this.Size * GameConfig.eaterSizeTextFontSizeCoef * Point.globalScale) + "px " + GameConfig.eaterSizeTextFont;
         ctx.textAlign = "middle";
         ctx.fillStyle = GameConfig.eaterSizeTextFontColor;
-        var posText = new Point(this.pos.toCanvas_Point().X - ctx.measureText(this.Size.toString()).width / 2, this.pos.toCanvas_Point().Y + this.fontSize * Point.globalScale/2);
-        ctx.fillText(this.Size.toString(), posText.X, posText.Y);
+        var posText = new Point(this.pos.toCanvas_Point().X - ctx.measureText(Math.floor(this.Size).toString()).width / 2, this.pos.toCanvas_Point().Y + Math.floor(this.Size * GameConfig.eaterSizeTextFontSizeCoef * Point.globalScale)/2);
+        ctx.fillText(Math.floor(this.Size).toString(), posText.X, posText.Y);
     }
     Update(dT: number) {
         this.Speed.X = this.Speed.X <= this.MaxSpeed && this.Speed.X >= -this.MaxSpeed ? this.Speed.X + this.SpeedUp * this.VectorSpeedUp.X * dT : this.MaxSpeed * sign(this.Speed.X);
@@ -146,7 +146,8 @@ class PlayerGameObject extends Eater {
             this.Speed.Y = this.Speed.Y < 0 ? this.Speed.Y + this.SpeedDown * dT : this.Speed.Y;
         }
         this.pos.X += this.Speed.X * dT;
-        this.pos.Y += this.Speed.Y * dT;      
+        this.pos.Y += this.Speed.Y * dT;
+
     }
 }
 

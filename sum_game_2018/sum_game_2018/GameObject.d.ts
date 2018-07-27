@@ -30,10 +30,9 @@ declare abstract class Eater extends GameObject {
     SpeedDown: number;
     VectorSpeedUp: Vector;
     canvas: HTMLCanvasElement;
-    fontSize: number;
 }
 declare class PlayerGameObject extends Eater {
-    constructor(canvas: HTMLCanvasElement, Color: string);
+    constructor(canvas: HTMLCanvasElement, pos: Point, Color: string);
     mouseMove(e: MouseEvent): void;
     keydown(e: KeyboardEvent): void;
     keyup(e: KeyboardEvent): void;

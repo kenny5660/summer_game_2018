@@ -1,7 +1,7 @@
 ﻿class Camera {
     pos: Point;
-    private width: number;
-    private height: number;
+    public width: number;
+    public height: number;
     private canvas: HTMLCanvasElement;
     private followObject: GameObject = null;
     constructor(canvas: HTMLCanvasElement, pos: Point, width: number, height: number) {
@@ -57,19 +57,24 @@ class Scene {
 class SceneGame extends Scene {
     eaters: Eater[];
     foods: Food[];
-
-    constructor(canvas: HTMLCanvasElement, backgroundColor: string | CanvasPattern) {
+    width: number;
+    height: number;
+    foodMass: number;
+    private sizeForScale: number;
+    private SumDeltaSizeCoef: number;
+    private player: PlayerGameObject;
+    constructor(canvas: HTMLCanvasElement, width: number,height:number, backgroundColor: string | CanvasPattern) {
         var gameCamera = new Camera(canvas, new Point(0, 0), GameConfig.defaultCanvasWidth, GameConfig.defaultCanvasHeght);
         super(canvas, gameCamera, backgroundColor);
         this.eaters = [];
         this.foods = [];
-        var player = new PlayerGameObject(canvas, "green");
-        this.eaters.push(player);
-        gameCamera.setFollowObject(player);
-        for (var i = 0; i < 5000; i++) {
-            this.foods.push(new Food(new Point(Math.abs(Math.random() * 5000), Math.abs(Math.random() * 5000)), GameConfig.foodSize, "purple"));
-        }
-
+        this.width = width;
+        this.height = height
+        this.SumDeltaSizeCoef = 1;
+        this.foodMass = GameConfig.foodMass
+        this.sizeForScale = GameConfig.startEaterSize + GameConfig.deltaPlayerSizeForScale;
+        this.generateEaters();
+      
     }
     UpdateObjects(dT: number) {
         for (var i = this.foods.length - 1; i >= 0; --i) {
@@ -80,6 +85,15 @@ class SceneGame extends Scene {
         }
         super.UpdateObjects(dT);
         this.collisions();
+        this.generateFood();
+        if (this.player.Size >= this.sizeForScale) {
+            var deltaSizeCoef = (this.player.Size - GameConfig.deltaPlayerSizeForScale * this.SumDeltaSizeCoef) / this.player.Size;
+            this.SumDeltaSizeCoef +=0.5;
+            this.Camera.width /= deltaSizeCoef;
+            this.Camera.height /= deltaSizeCoef;
+            this.sizeForScale += GameConfig.deltaPlayerSizeForScale *this.SumDeltaSizeCoef;
+            this.Camera.Update(dT);
+        }
     }
     DrawObjects() {
         this.ctx.fillStyle = this.BackgroundColor;
@@ -90,6 +104,20 @@ class SceneGame extends Scene {
         }
         for (var i = this.eaters.length - 1; i >= 0; --i) {
             this.eaters[i].Draw(this.ctx);
+        }
+    }
+    private generateEaters() {
+        this.player = new PlayerGameObject(this.Canvas, new Point(Math.abs(Math.random() * this.width), Math.abs(Math.random() * this.height)), "green");
+        this.foodMass -= this.player.Size / GameConfig.defaultFoodSizeCoef;
+        this.eaters.push(this.player);
+        this.Camera.setFollowObject(this.player);
+    }
+    private generateFood() {
+        var foodSize: number;
+        for (; this.foodMass > 0; ) {
+            foodSize = Math.abs(Math.random()) < GameConfig.food2xChance ? 2 : 1
+            this.foods.push(new Food(new Point(Math.abs(Math.random() * this.width), Math.abs(Math.random() * this.height)), foodSize * GameConfig.foodSize, "purple"));
+            this.foodMass -= foodSize * GameConfig.foodSize * GameConfig.defaultFoodSizeCoef;
         }
     }
     private collisions() {
@@ -111,7 +139,7 @@ class SceneGame extends Scene {
 
             for (var j = this.foods.length - 1; j >= 0; --j) {
                 if (Collisions.CircleInCircle(this.eaters[i].pos, this.eaters[i].Size, this.foods[j].pos, this.foods[j].Size)) {
-                    this.eaters[i].Size += this.foods[j].Size * GameConfig.deafultFoodCost;
+                    this.eaters[i].Size += this.foods[j].Size * GameConfig.defaultFoodSizeCoef;
                     this.foods.splice(j, 1);
 
                 }

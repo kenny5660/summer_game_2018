@@ -1,7 +1,7 @@
 declare class Camera {
     pos: Point;
-    private width;
-    private height;
+    width: number;
+    height: number;
     private canvas;
     private followObject;
     constructor(canvas: HTMLCanvasElement, pos: Point, width: number, height: number);
@@ -22,9 +22,17 @@ declare class Scene {
 declare class SceneGame extends Scene {
     eaters: Eater[];
     foods: Food[];
-    constructor(canvas: HTMLCanvasElement, backgroundColor: string | CanvasPattern);
+    width: number;
+    height: number;
+    foodMass: number;
+    private sizeForScale;
+    private SumDeltaSizeCoef;
+    private player;
+    constructor(canvas: HTMLCanvasElement, width: number, height: number, backgroundColor: string | CanvasPattern);
     UpdateObjects(dT: number): void;
     DrawObjects(): void;
+    private generateEaters();
+    private generateFood();
     private collisions();
 }
 declare class Collisions {

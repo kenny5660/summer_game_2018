@@ -12,7 +12,7 @@ class Game {
         this.Canvas.width = window.innerWidth;
         this.Canvas.height = window.innerHeight;
         var ctx = this.Canvas.getContext('2d');
-        var gameScene = new SceneGame(canvas, "white");
+        var gameScene = new SceneGame(canvas, GameConfig.gameSceneWidth, GameConfig.gameSceneHeight, "white");
         this.CurScene = gameScene
         var mainMenuScene = new Scene(canvas, new Camera(canvas, new Point(0, 0), GameConfig.defaultCanvasWidth, GameConfig.defaultCanvasHeght), "grey");
         var startButton = new MenuButton("START", new Point(300, 300));
