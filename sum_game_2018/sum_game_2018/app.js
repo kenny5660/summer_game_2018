@@ -28,7 +28,9 @@ var Game = /** @class */ (function () {
             drawStuff();
         }
         resizeCanvas();
-        window.addEventListener('focus', function () { return lastTime = Date.now(); }, false);
+        window.onfocus = function () {
+            lastTime = Date.now();
+        };
         function drawStuff() {
             //    Game.CurScene.UpdateObjects(0);
             Game.CurScene.DrawObjects();
@@ -37,8 +39,10 @@ var Game = /** @class */ (function () {
         function GameLoop() {
             var now = Date.now();
             var dT = (now - lastTime) / 1000.0;
-            Game.CurScene.UpdateObjects(dT);
-            Game.CurScene.DrawObjects();
+            if (dT < 1) {
+                Game.CurScene.UpdateObjects(dT);
+                Game.CurScene.DrawObjects();
+            }
             lastTime = now;
             window.requestAnimationFrame(GameLoop);
         }
