@@ -120,7 +120,8 @@ class SceneGame extends Scene {
             this.foodMass -= bot.Size / GameConfig.defaultFoodSizeCoef;
             this.eaters.push(bot);
         }
-        this.Camera.setFollowObject(this.player);
+          this.Camera.setFollowObject(this.player);
+       // this.Camera.setFollowObject(this.eaters[2]);
     }
 
     private generateFood() {

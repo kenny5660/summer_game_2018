@@ -1,5 +1,8 @@
 var Key;
 (function (Key) {
+    Key[Key["MauseLeftBut"] = 1] = "MauseLeftBut";
+    Key[Key["MauseRightBut"] = 3] = "MauseRightBut";
+    Key[Key["MauseMidBut"] = 2] = "MauseMidBut";
     Key[Key["Backspace"] = 8] = "Backspace";
     Key[Key["Tab"] = 9] = "Tab";
     Key[Key["Enter"] = 13] = "Enter";

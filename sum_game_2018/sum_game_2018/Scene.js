@@ -113,6 +113,7 @@ var SceneGame = /** @class */ (function (_super) {
             this.eaters.push(bot);
         }
         this.Camera.setFollowObject(this.player);
+        // this.Camera.setFollowObject(this.eaters[2]);
     };
     SceneGame.prototype.generateFood = function () {
         var foodSize;

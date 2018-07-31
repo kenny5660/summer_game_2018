@@ -32,9 +32,11 @@ declare class Eater extends GameObject {
     SpeedUp: number;
     SpeedDown: number;
     VectorSpeedUp: Vector;
+    isForcing: boolean;
     constructor(Scene: SceneGame, pos: Point, Color: string);
     Draw(ctx: CanvasRenderingContext2D): void;
     Update(dT: number): void;
+    private forcing(dT);
 }
 declare class Bot extends Eater {
     constructor(Scene: SceneGame, pos: Point, Color: string);
@@ -43,6 +45,8 @@ declare class Bot extends Eater {
 declare class Player extends Eater {
     constructor(Scene: SceneGame, pos: Point, Color: string);
     mouseMove(e: MouseEvent): void;
+    mouseDown(e: MouseEvent): void;
+    mouseUp(e: MouseEvent): void;
     keydown(e: KeyboardEvent): void;
     keyup(e: KeyboardEvent): void;
 }

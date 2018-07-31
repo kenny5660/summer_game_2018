@@ -1,4 +1,7 @@
- enum Key {
+enum Key {
+    MauseLeftBut = 1,
+    MauseRightBut = 3,
+    MauseMidBut = 2,
     Backspace = 8,
     Tab = 9,
     Enter = 13,

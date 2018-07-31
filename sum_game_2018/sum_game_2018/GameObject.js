@@ -71,12 +71,13 @@ var Eater = /** @class */ (function (_super) {
         _this.MaxSpeed = GameConfig.eaterStartMaxSpeed;
         _this.SpeedUp = GameConfig.eaterStartSpeedUp;
         _this.SpeedDown = GameConfig.eaterStartSpeedDown;
+        _this.isForcing = false;
         _this.Scene = Scene;
         _this.Size = GameConfig.eaterStartSize;
         _this.Color = Color;
         _this.pos = pos;
-        _this.VectorSpeedUp = new Vector(0, 0);
-        _this.Speed = new Vector(0, 0);
+        _this.VectorSpeedUp = new Vector(1, 0);
+        _this.Speed = new Vector(10, 10);
         return _this;
     }
     Eater.prototype.Draw = function (ctx) {
@@ -94,16 +95,11 @@ var Eater = /** @class */ (function (_super) {
         ctx.fillText(Math.floor(this.Size).toString(), posText.X, posText.Y);
     };
     Eater.prototype.Update = function (dT) {
+        this.forcing(dT);
         this.Speed.X = this.Speed.X <= this.MaxSpeed && this.Speed.X >= -this.MaxSpeed ? this.Speed.X + this.SpeedUp * this.VectorSpeedUp.X * dT : this.MaxSpeed * sign(this.Speed.X);
         this.Speed.Y = this.Speed.Y <= this.MaxSpeed && this.Speed.Y >= -this.MaxSpeed ? this.Speed.Y + this.SpeedUp * this.VectorSpeedUp.Y * dT : this.MaxSpeed * sign(this.Speed.Y);
-        if (this.VectorSpeedUp.X == 0) {
-            this.Speed.X = this.Speed.X > 0 ? this.Speed.X - this.SpeedDown * dT : this.Speed.X;
-            this.Speed.X = this.Speed.X < 0 ? this.Speed.X + this.SpeedDown * dT : this.Speed.X;
-        }
-        if (this.VectorSpeedUp.Y == 0) {
-            this.Speed.Y = this.Speed.Y > 0 ? this.Speed.Y - this.SpeedDown * dT : this.Speed.Y;
-            this.Speed.Y = this.Speed.Y < 0 ? this.Speed.Y + this.SpeedDown * dT : this.Speed.Y;
-        }
+        this.Speed.X += this.Speed.X * this.Speed.X * -GameConfig.eaterFrictionSpeedDownCoef * dT * sign(this.Speed.X);
+        this.Speed.Y += this.Speed.Y * this.Speed.Y * -GameConfig.eaterFrictionSpeedDownCoef * dT * sign(this.Speed.Y);
         var newPosX = this.pos.X + this.Speed.X * dT;
         var newPosY = this.pos.Y + this.Speed.Y * dT;
         this.pos.X = newPosX < this.Scene.width ? newPosX < 0 ? 0 : newPosX : this.Scene.width;
@@ -111,6 +107,17 @@ var Eater = /** @class */ (function (_super) {
         var loseSize = this.Size - this.Size * GameConfig.eaterCoefSpeedLoseSize * dT < GameConfig.eaterStartSize ? this.Size - GameConfig.eaterStartSize : this.Size * GameConfig.eaterCoefSpeedLoseSize * dT;
         this.Size -= loseSize;
         this.Scene.foodMass += loseSize;
+    };
+    Eater.prototype.forcing = function (dT) {
+        if (this.isForcing && this.Size > GameConfig.eaterStartSize) {
+            this.SpeedUp = GameConfig.eaterForcingSpeedUp;
+            var loseSize = this.Size - GameConfig.eaterForcingSpeedLoseSize * dT < GameConfig.eaterStartSize ? this.Size - GameConfig.eaterStartSize : GameConfig.eaterForcingSpeedLoseSize * dT;
+            this.Size -= loseSize;
+            this.Scene.foodMass += loseSize;
+        }
+        else {
+            this.SpeedUp = GameConfig.eaterStartSpeedUp;
+        }
     };
     return Eater;
 }(GameObject));
@@ -169,6 +176,8 @@ var Player = /** @class */ (function (_super) {
         addEventListener("keydown", KeyBoardListener_keydown);
         addEventListener("keyup", KeyBoardListener_keyup);
         addEventListener("mousemove", MouseListener_Move);
+        addEventListener("mousedown", MouseListener_Down);
+        addEventListener("mouseup", MouseListener_Up);
         function KeyBoardListener_keydown(e) {
             input.keydown(e);
         }
@@ -178,6 +187,12 @@ var Player = /** @class */ (function (_super) {
         function KeyBoardListener_keyup(e) {
             input.keyup(e);
         }
+        function MouseListener_Up(e) {
+            input.mouseUp(e);
+        }
+        function MouseListener_Down(e) {
+            input.mouseDown(e);
+        }
         return _this;
     }
     Player.prototype.mouseMove = function (e) {
@@ -185,6 +200,16 @@ var Player = /** @class */ (function (_super) {
         var canvasPos = this.pos.toCanvas_Point();
         var playerVector = new Vector(canvasPos.X, canvasPos.Y);
         this.VectorSpeedUp = mouseVector.sub(playerVector).normalize();
+    };
+    Player.prototype.mouseDown = function (e) {
+        if (e.which == Key.MauseLeftBut) {
+            this.isForcing = true;
+        }
+    };
+    Player.prototype.mouseUp = function (e) {
+        if (e.which == Key.MauseLeftBut) {
+            this.isForcing = false;
+        }
     };
     Player.prototype.keydown = function (e) {
         if (e.keyCode == Key.UpArrow) {
@@ -199,6 +224,9 @@ var Player = /** @class */ (function (_super) {
         if (e.keyCode == Key.LeftArrow) {
             this.VectorSpeedUp.X = -1;
         }
+        if (e.keyCode == Key.Space) {
+            this.isForcing = true;
+        }
     };
     Player.prototype.keyup = function (e) {
         if (e.keyCode == Key.DownArrow) {
@@ -212,6 +240,9 @@ var Player = /** @class */ (function (_super) {
         }
         if (e.keyCode == Key.RightArrow) {
             this.VectorSpeedUp.X = 0;
+        }
+        if (e.keyCode == Key.Space) {
+            this.isForcing = false;
         }
     };
     return Player;
