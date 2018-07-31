@@ -17,13 +17,13 @@
     }
     Update(dT: number) {
         if (this.followObject.Size * Point.globalScale > GameConfig.maxCameraPlayerSize) {
-            var deltaSizeCoef = (GameConfig.minCameraPlayerSize) / (this.followObject.Size);
+            var deltaSizeCoef = GameConfig.minCameraPlayerSize/ (this.followObject.Size)-0.1;
 
             this.width /= deltaSizeCoef;
             this.height /= deltaSizeCoef;
         }
         if (this.followObject.Size * Point.globalScale < GameConfig.minCameraPlayerSize) {
-            var deltaSizeCoef = this.followObject.Size / GameConfig.minCameraPlayerSize;
+            var deltaSizeCoef = this.followObject.Size / GameConfig.minCameraPlayerSize+0.1;
             this.width /= deltaSizeCoef;
             this.height /= deltaSizeCoef;
         }
