@@ -44,17 +44,20 @@ declare class Bot extends Eater {
 }
 declare class Player extends Eater {
     constructor(Scene: SceneGame, pos: Point, Color: string);
-    mouseMove(e: MouseEvent): void;
-    mouseDown(e: MouseEvent): void;
-    mouseUp(e: MouseEvent): void;
-    keydown(e: KeyboardEvent): void;
-    keyup(e: KeyboardEvent): void;
+    private touchStart(e);
+    private touchCancel(e);
+    private touchMove(e);
+    private mouseMove(e);
+    private mouseDown(e);
+    private mouseUp(e);
+    private keydown(e);
+    private keyup(e);
 }
 declare class Food extends GameObject {
     Size: number;
     Color: string;
     Cost: number;
-    constructor(pos: Point, Size: number, Color: string);
+    constructor(pos: Point, Size: number, Cost: number, Color: string);
     Draw(ctx: CanvasRenderingContext2D): void;
     Update(dT: number): void;
 }

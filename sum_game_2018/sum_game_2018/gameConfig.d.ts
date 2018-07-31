@@ -13,9 +13,9 @@ declare class GameConfig {
     static eaterSizeTextFontColor: string;
     static eaterCoefSpeedLoseSize: number;
     static foodSize: number;
-    static defaultCanvasWidth: number;
-    static defaultCanvasHeght: number;
-    static defaultFoodSizeCoef: number;
+    static foodCost: number;
+    static canvasWidthDefault: number;
+    static canvasHeghtDefault: number;
     static gameSceneWidth: number;
     static gameSceneHeight: number;
     static foodMass: number;
@@ -23,4 +23,5 @@ declare class GameConfig {
     static botNumber: number;
     static botDistAtackEater: number;
     static botAngry: number;
+    static botAngryForcingDistCoef: number;
 }

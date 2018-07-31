@@ -145,12 +145,13 @@ var Bot = /** @class */ (function (_super) {
                 nearestFood = this.Scene.foods[i];
             }
         }
-        if (minDistEater - this.Size / 2 < GameConfig.botDistAtackEater) {
+        if (minDistEater - this.Size / 2 - nearestEater.Size / 2 < GameConfig.botDistAtackEater) {
             if (nearestEater != null) {
                 var eaterVector = new Vector(nearestEater.pos.X, nearestEater.pos.Y);
                 var thisVector = new Vector(this.pos.X, this.pos.Y);
                 if (nearestEater.Size + GameConfig.botAngry < this.Size) {
                     this.VectorSpeedUp = eaterVector.sub(thisVector).normalize();
+                    this.isForcing = nearestEater.Size + GameConfig.botAngry + GameConfig.botAngryForcingDistCoef * minDistEater < this.Size;
                 }
                 else {
                     this.VectorSpeedUp = eaterVector.sub(thisVector).normalize().negative();
@@ -158,6 +159,7 @@ var Bot = /** @class */ (function (_super) {
             }
         }
         else {
+            this.isForcing = false;
             if (nearestFood != null) {
                 var foodVector = new Vector(nearestFood.pos.X, nearestFood.pos.Y);
                 var thisVector = new Vector(this.pos.X, this.pos.Y);
@@ -173,28 +175,29 @@ var Player = /** @class */ (function (_super) {
     function Player(Scene, pos, Color) {
         var _this = _super.call(this, Scene, pos, Color) || this;
         var input = _this;
-        addEventListener("keydown", KeyBoardListener_keydown);
-        addEventListener("keyup", KeyBoardListener_keyup);
-        addEventListener("mousemove", MouseListener_Move);
-        addEventListener("mousedown", MouseListener_Down);
-        addEventListener("mouseup", MouseListener_Up);
-        function KeyBoardListener_keydown(e) {
-            input.keydown(e);
-        }
-        function MouseListener_Move(e) {
-            input.mouseMove(e);
-        }
-        function KeyBoardListener_keyup(e) {
-            input.keyup(e);
-        }
-        function MouseListener_Up(e) {
-            input.mouseUp(e);
-        }
-        function MouseListener_Down(e) {
-            input.mouseDown(e);
-        }
+        addEventListener("keydown", function (e) { return input.keydown(e); });
+        addEventListener("keyup", function (e) { return input.keyup(e); });
+        addEventListener("touchstart", function (e) { return input.touchStart(e); });
+        addEventListener("touchstart", function (e) { return input.touchCancel(e); });
+        addEventListener("touchmove", function (e) { return input.touchMove(e); });
+        addEventListener("mousemove", function (e) { return input.mouseMove(e); });
+        addEventListener("mousedown", function (e) { return input.mouseDown(e); });
+        addEventListener("mouseup", function (e) { return input.mouseUp(e); });
         return _this;
     }
+    Player.prototype.touchStart = function (e) {
+        this.isForcing = e.touches.length > 1;
+    };
+    Player.prototype.touchCancel = function (e) {
+        this.isForcing = e.touches.length > 1;
+    };
+    Player.prototype.touchMove = function (e) {
+        var touchVector = new Vector(e.touches[0].pageX, e.touches[0].pageY);
+        var canvasPos = this.pos.toCanvas_Point();
+        var playerVector = new Vector(canvasPos.X, canvasPos.Y);
+        this.VectorSpeedUp = touchVector.sub(playerVector).normalize();
+        this.isForcing = e.touches.length > 1;
+    };
     Player.prototype.mouseMove = function (e) {
         var mouseVector = new Vector(e.x, e.y);
         var canvasPos = this.pos.toCanvas_Point();
@@ -249,10 +252,11 @@ var Player = /** @class */ (function (_super) {
 }(Eater));
 var Food = /** @class */ (function (_super) {
     __extends(Food, _super);
-    function Food(pos, Size, Color) {
+    function Food(pos, Size, Cost, Color) {
         var _this = _super.call(this) || this;
         _this.Size = Size;
         _this.pos = pos;
+        _this.Cost = Cost;
         _this.Color = Color;
         return _this;
     }

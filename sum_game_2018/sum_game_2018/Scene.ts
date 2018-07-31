@@ -16,23 +16,24 @@
         }
     }
     Update(dT: number) {
-        if (this.followObject.Size * Point.globalScale >= GameConfig.maxCameraPlayerSize) {
-            var deltaSizeCoef = (GameConfig.minCameraPlayerSize + 5) / this.followObject.Size;
+        if (this.followObject.Size * Point.globalScale > GameConfig.maxCameraPlayerSize) {
+            var deltaSizeCoef = (GameConfig.minCameraPlayerSize) / (this.followObject.Size);
 
             this.width /= deltaSizeCoef;
             this.height /= deltaSizeCoef;
         }
         if (this.followObject.Size * Point.globalScale < GameConfig.minCameraPlayerSize) {
-            var deltaSizeCoef = this.followObject.Size / GameConfig.eaterStartSize;
+            var deltaSizeCoef = this.followObject.Size / GameConfig.minCameraPlayerSize+0.01;
             this.width /= deltaSizeCoef;
             this.height /= deltaSizeCoef;
         }
+        
+        Point.globalScale = 1 / Math.max(this.width / this.canvas.width, this.height / this.canvas.height);
         if (this.followObject != null) {
             this.pos.X = Math.floor(-this.followObject.pos.X * Point.globalScale + this.canvas.width / 2);
             this.pos.Y = Math.floor(-this.followObject.pos.Y * Point.globalScale + this.canvas.height / 2);
         }
         Point.globalOffset = this.pos;
-        Point.globalScale = 1 / Math.max(this.width / this.canvas.width, this.height / this.canvas.height);
     }
     setFollowObject(followObject: Eater) {
         this.followObject = followObject;
@@ -52,11 +53,11 @@ class Scene {
         this.Camera = Camera;
     }
     UpdateObjects(dT: number) {
-
+        this.Camera.Update(dT);
         for (var i = this.GameObjects.length - 1; i >= 0; --i) {
             this.GameObjects[i].Update(dT);
         }
-        this.Camera.Update(dT);
+       
     }
     DrawObjects() {
         this.ctx.fillStyle = this.BackgroundColor;
@@ -74,7 +75,7 @@ class SceneGame extends Scene {
     private player: Player;
 
     constructor(canvas: HTMLCanvasElement, width: number, height: number, backgroundColor: string | CanvasPattern) {
-        var gameCamera = new Camera(canvas, new Point(0, 0), GameConfig.defaultCanvasWidth, GameConfig.defaultCanvasHeght);
+        var gameCamera = new Camera(canvas, new Point(0, 0), GameConfig.canvasWidthDefault, GameConfig.canvasHeghtDefault);
         super(canvas, gameCamera, backgroundColor);
         this.eaters = [];
         this.foods = [];
@@ -86,6 +87,7 @@ class SceneGame extends Scene {
     }
 
     UpdateObjects(dT: number) {
+        
         for (var i = this.foods.length - 1; i >= 0; --i) {
             this.foods[i].Update(dT);
         }
@@ -112,12 +114,12 @@ class SceneGame extends Scene {
 
     private generateEaters() {
         this.player = new Player(this, new Point(Math.abs(Math.random() * this.width), Math.abs(Math.random() * this.height)), "green");
-        this.foodMass -= this.player.Size / GameConfig.defaultFoodSizeCoef;
+        this.foodMass -= this.player.Size;
         this.eaters.push(this.player);
 
         for (var i = 0; i < GameConfig.botNumber; ++i) {
             var bot = new Bot(this, new Point(Math.abs(Math.random() * this.width), Math.abs(Math.random() * this.height)), "red");
-            this.foodMass -= bot.Size / GameConfig.defaultFoodSizeCoef;
+            this.foodMass -= bot.Size;
             this.eaters.push(bot);
         }
           this.Camera.setFollowObject(this.player);
@@ -125,11 +127,11 @@ class SceneGame extends Scene {
     }
 
     private generateFood() {
-        var foodSize: number;
         for (; this.foodMass >= 1;) {
-            foodSize = Math.abs(Math.random()) < GameConfig.food2xChance ? 2 : 1
-            this.foods.push(new Food(new Point(Math.abs(Math.random() * this.width), Math.abs(Math.random() * this.height)), foodSize * GameConfig.foodSize, "purple"));
-            this.foodMass -= foodSize * GameConfig.foodSize * GameConfig.defaultFoodSizeCoef;
+
+           var foodSizeDB = Math.abs(Math.random()) < GameConfig.food2xChance ? 2 : 1
+            this.foods.push(new Food(new Point(Math.abs(Math.random() * this.width), Math.abs(Math.random() * this.height)), foodSizeDB * GameConfig.foodSize, GameConfig.foodCost * foodSizeDB, "purple"));
+            this.foodMass -= GameConfig.foodCost * foodSizeDB;
         }
     }
 
@@ -137,7 +139,7 @@ class SceneGame extends Scene {
         for (var i = this.eaters.length - 1; i >= 0; --i) {
             for (var j = this.foods.length - 1; j >= 0; --j) {
                 if (Collisions.CircleInCircle(this.eaters[i].pos, this.eaters[i].Size, this.foods[j].pos, this.foods[j].Size)) {
-                    this.eaters[i].Size += this.foods[j].Size * GameConfig.defaultFoodSizeCoef;
+                    this.eaters[i].Size += this.foods[j].Cost;
                     this.foods.splice(j, 1);
 
                 }

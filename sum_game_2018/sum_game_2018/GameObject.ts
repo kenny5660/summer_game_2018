@@ -15,7 +15,7 @@ class Vector {
         this.Y /= d;
         return this;
     }
-    negative():Vector {
+    negative(): Vector {
         this.X = -this.X;
         this.Y = -this.Y;
         return this;
@@ -99,8 +99,8 @@ class Eater extends GameObject {
         this.Speed.X = this.Speed.X <= this.MaxSpeed && this.Speed.X >= -this.MaxSpeed ? this.Speed.X + this.SpeedUp * this.VectorSpeedUp.X * dT : this.MaxSpeed * sign(this.Speed.X);
         this.Speed.Y = this.Speed.Y <= this.MaxSpeed && this.Speed.Y >= -this.MaxSpeed ? this.Speed.Y + this.SpeedUp * this.VectorSpeedUp.Y * dT : this.MaxSpeed * sign(this.Speed.Y);
 
-        this.Speed.X += this.Speed.X * this.Speed.X * -GameConfig.eaterFrictionSpeedDownCoef * dT * sign(this.Speed.X); 
-        this.Speed.Y += this.Speed.Y * this.Speed.Y * -GameConfig.eaterFrictionSpeedDownCoef * dT * sign(this.Speed.Y); 
+        this.Speed.X += this.Speed.X * this.Speed.X * -GameConfig.eaterFrictionSpeedDownCoef * dT * sign(this.Speed.X);
+        this.Speed.Y += this.Speed.Y * this.Speed.Y * -GameConfig.eaterFrictionSpeedDownCoef * dT * sign(this.Speed.Y);
 
         var newPosX = this.pos.X + this.Speed.X * dT;
         var newPosY = this.pos.Y + this.Speed.Y * dT;
@@ -148,12 +148,13 @@ class Bot extends Eater {
             }
         }
 
-        if (minDistEater - this.Size / 2 < GameConfig.botDistAtackEater) {
+        if (minDistEater - this.Size / 2 - nearestEater.Size/2 < GameConfig.botDistAtackEater) {
             if (nearestEater != null) {
                 var eaterVector = new Vector(nearestEater.pos.X, nearestEater.pos.Y);
                 var thisVector = new Vector(this.pos.X, this.pos.Y);
                 if (nearestEater.Size + GameConfig.botAngry < this.Size) {
                     this.VectorSpeedUp = eaterVector.sub(thisVector).normalize();
+                    this.isForcing = nearestEater.Size + GameConfig.botAngry+GameConfig.botAngryForcingDistCoef * minDistEater < this.Size;
                 }
                 else {
                     this.VectorSpeedUp = eaterVector.sub(thisVector).normalize().negative();
@@ -161,6 +162,7 @@ class Bot extends Eater {
             }
         }
         else {
+            this.isForcing = false;
             if (nearestFood != null) {
                 var foodVector = new Vector(nearestFood.pos.X, nearestFood.pos.Y);
                 var thisVector = new Vector(this.pos.X, this.pos.Y);
@@ -176,48 +178,52 @@ class Player extends Eater {
     constructor(Scene: SceneGame, pos: Point, Color: string) {
         super(Scene, pos, Color);
         var input = this;
-        addEventListener("keydown", KeyBoardListener_keydown);
-        addEventListener("keyup", KeyBoardListener_keyup);
-        addEventListener("mousemove", MouseListener_Move);
-        addEventListener("mousedown", MouseListener_Down);
-        addEventListener("mouseup", MouseListener_Up);
-        function KeyBoardListener_keydown(e: KeyboardEvent) {
-            input.keydown(e);
-        }
-        function MouseListener_Move(e: MouseEvent) {
-            input.mouseMove(e);
-        }
-        function KeyBoardListener_keyup(e: KeyboardEvent) {
-            input.keyup(e);
-        }
-        function MouseListener_Up(e: MouseEvent) {
-            input.mouseUp(e);
-        }
-        function MouseListener_Down(e: MouseEvent) {
-            input.mouseDown(e);
-        }
+        addEventListener("keydown", (e: KeyboardEvent) => input.keydown(e));
+        addEventListener("keyup", (e: KeyboardEvent) => input.keyup(e));
+        addEventListener("touchstart", (e: TouchEvent) => input.touchStart(e));
+        addEventListener("touchstart", (e: TouchEvent) => input.touchCancel(e));
+        addEventListener("touchmove", (e: TouchEvent) => input.touchMove(e));
+        addEventListener("mousemove", (e: MouseEvent) => input.mouseMove(e));
+        addEventListener("mousedown", (e: MouseEvent) => input.mouseDown(e));
+        addEventListener("mouseup", (e: MouseEvent) => input.mouseUp(e));
     }
 
-    mouseMove(e: MouseEvent) {
+    private touchStart(e: TouchEvent) {
+        this.isForcing = e.touches.length > 1; 
+    }
+
+    private touchCancel(e: TouchEvent) {
+        this.isForcing = e.touches.length > 1; 
+    }
+
+    private touchMove(e: TouchEvent) {
+        var touchVector = new Vector(e.touches[0].pageX, e.touches[0].pageY);
+        var canvasPos = this.pos.toCanvas_Point();
+        var playerVector = new Vector(canvasPos.X, canvasPos.Y);
+        this.VectorSpeedUp = touchVector.sub(playerVector).normalize();
+        this.isForcing = e.touches.length > 1; 
+    }
+
+    private mouseMove(e: MouseEvent) {
         var mouseVector = new Vector(e.x, e.y);
         var canvasPos = this.pos.toCanvas_Point();
         var playerVector = new Vector(canvasPos.X, canvasPos.Y);
         this.VectorSpeedUp = mouseVector.sub(playerVector).normalize();
     }
 
-    mouseDown(e: MouseEvent) {
+    private mouseDown(e: MouseEvent) {
         if (e.which == Key.MauseLeftBut) {
             this.isForcing = true;
         }
     }
 
-    mouseUp(e: MouseEvent) {
+    private mouseUp(e: MouseEvent) {
         if (e.which == Key.MauseLeftBut) {
             this.isForcing = false;
         }
     }
 
-    keydown(e: KeyboardEvent) {
+    private keydown(e: KeyboardEvent) {
         if (e.keyCode == Key.UpArrow) {
             this.VectorSpeedUp.Y = -1;
         }
@@ -234,7 +240,8 @@ class Player extends Eater {
             this.isForcing = true;
         }
     }
-    keyup(e: KeyboardEvent) {
+
+    private keyup(e: KeyboardEvent) {
         if (e.keyCode == Key.DownArrow) {
             this.VectorSpeedUp.Y = 0;
         }
@@ -258,10 +265,11 @@ class Food extends GameObject {
     Size: number;
     Color: string;
     Cost: number;
-    constructor(pos: Point, Size: number, Color: string) {
+    constructor(pos: Point, Size: number, Cost: number, Color: string) {
         super();
         this.Size = Size;
         this.pos = pos;
+        this.Cost = Cost;
         this.Color = Color;
     }
     Draw(ctx: CanvasRenderingContext2D) {

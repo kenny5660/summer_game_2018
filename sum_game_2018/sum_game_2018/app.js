@@ -13,7 +13,7 @@ var Game = /** @class */ (function () {
         var ctx = this.Canvas.getContext('2d');
         var gameScene = new SceneGame(canvas, GameConfig.gameSceneWidth, GameConfig.gameSceneHeight, "white");
         this.CurScene = gameScene;
-        var mainMenuScene = new Scene(canvas, new Camera(canvas, new Point(0, 0), GameConfig.defaultCanvasWidth, GameConfig.defaultCanvasHeght), "grey");
+        var mainMenuScene = new Scene(canvas, new Camera(canvas, new Point(0, 0), GameConfig.canvasWidthDefault, GameConfig.canvasHeghtDefault), "grey");
         var startButton = new MenuButton("START", new Point(300, 300));
         startButton.width = 400;
         startButton.height = 150;
@@ -28,6 +28,7 @@ var Game = /** @class */ (function () {
         }
         resizeCanvas();
         function drawStuff() {
+            //    Game.CurScene.UpdateObjects(0);
             Game.CurScene.DrawObjects();
         }
         var lastTime = Date.now();
