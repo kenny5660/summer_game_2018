@@ -13,11 +13,11 @@
     static defaultCanvasWidth = 1536;
     static defaultCanvasHeght = 732;
     static defaultFoodSizeCoef = 0.1;
-    static gameSceneWidth = 15000;
-    static gameSceneHeight = 15000;
+    static gameSceneWidth = 20000;
+    static gameSceneHeight = 20000;
     static foodMass = 20000;
     static food2xChance = 0.05;
-    static botNumber = 15;
+    static botNumber = 10;
     static botDistAtackEater = 600;
     static botAngry = 10;
 }
