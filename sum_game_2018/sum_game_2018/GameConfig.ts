@@ -6,8 +6,8 @@
     static eaterStartSpeedUp = 600;
     static eaterStartSpeedDown = 450;
     static eaterFrictionSpeedDownCoef = 0.01;
-    static eaterForcingSpeedUp = 3500;
-    static eaterForcingSpeedLoseSize = 20;
+    static eaterAccelerateSpeedUp = 3500;
+    static eaterAccelerateSpeedLoseSize = 20;
     static eaterSizeTextFont = "Arial";
     static eaterSizeTextFontSizeCoef = 0.5;
     static eaterSizeTextFontColor = "white";
@@ -23,5 +23,5 @@
     static botNumber = 10;
     static botDistAtackEater = 1000;
     static botAngry = 10;
-    static botAngryForcingDistCoef = 0.01;
+    static botAngryAccelerateDistCoef = 0.01;
 }

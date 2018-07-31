@@ -8,8 +8,8 @@ var GameConfig = /** @class */ (function () {
     GameConfig.eaterStartSpeedUp = 600;
     GameConfig.eaterStartSpeedDown = 450;
     GameConfig.eaterFrictionSpeedDownCoef = 0.01;
-    GameConfig.eaterForcingSpeedUp = 3500;
-    GameConfig.eaterForcingSpeedLoseSize = 20;
+    GameConfig.eaterAccelerateSpeedUp = 3500;
+    GameConfig.eaterAccelerateSpeedLoseSize = 20;
     GameConfig.eaterSizeTextFont = "Arial";
     GameConfig.eaterSizeTextFontSizeCoef = 0.5;
     GameConfig.eaterSizeTextFontColor = "white";
@@ -25,7 +25,7 @@ var GameConfig = /** @class */ (function () {
     GameConfig.botNumber = 10;
     GameConfig.botDistAtackEater = 1000;
     GameConfig.botAngry = 10;
-    GameConfig.botAngryForcingDistCoef = 0.01;
+    GameConfig.botAngryAccelerateDistCoef = 0.01;
     return GameConfig;
 }());
 //# sourceMappingURL=GameConfig.js.map

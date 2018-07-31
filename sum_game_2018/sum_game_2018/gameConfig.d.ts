@@ -6,8 +6,8 @@ declare class GameConfig {
     static eaterStartSpeedUp: number;
     static eaterStartSpeedDown: number;
     static eaterFrictionSpeedDownCoef: number;
-    static eaterForcingSpeedUp: number;
-    static eaterForcingSpeedLoseSize: number;
+    static eaterAccelerateSpeedUp: number;
+    static eaterAccelerateSpeedLoseSize: number;
     static eaterSizeTextFont: string;
     static eaterSizeTextFontSizeCoef: number;
     static eaterSizeTextFontColor: string;
@@ -23,5 +23,5 @@ declare class GameConfig {
     static botNumber: number;
     static botDistAtackEater: number;
     static botAngry: number;
-    static botAngryForcingDistCoef: number;
+    static botAngryAccelerateDistCoef: number;
 }

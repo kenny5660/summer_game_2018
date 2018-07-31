@@ -67,7 +67,7 @@ class Eater extends GameObject {
     SpeedUp: number = GameConfig.eaterStartSpeedUp;
     SpeedDown: number = GameConfig.eaterStartSpeedDown;
     VectorSpeedUp: Vector;
-    isForcing: boolean = false;
+    isAccelerate: boolean = false;
     constructor(Scene: SceneGame, pos: Point, Color: string) {
         super();
         this.Scene = Scene;
@@ -95,7 +95,7 @@ class Eater extends GameObject {
         ctx.fillText(Math.floor(this.Size).toString(), posText.X, posText.Y);
     }
     Update(dT: number) {
-        this.forcing(dT);
+        this.Accelerate(dT);
         this.Speed.X = this.Speed.X <= this.MaxSpeed && this.Speed.X >= -this.MaxSpeed ? this.Speed.X + this.SpeedUp * this.VectorSpeedUp.X * dT : this.MaxSpeed * sign(this.Speed.X);
         this.Speed.Y = this.Speed.Y <= this.MaxSpeed && this.Speed.Y >= -this.MaxSpeed ? this.Speed.Y + this.SpeedUp * this.VectorSpeedUp.Y * dT : this.MaxSpeed * sign(this.Speed.Y);
 
@@ -111,10 +111,10 @@ class Eater extends GameObject {
         this.Size -= loseSize;
         this.Scene.foodMass += loseSize;
     }
-    private forcing(dT: number) {
-        if (this.isForcing && this.Size > GameConfig.eaterStartSize) {
-            this.SpeedUp = GameConfig.eaterForcingSpeedUp;
-            var loseSize = this.Size - GameConfig.eaterForcingSpeedLoseSize * dT < GameConfig.eaterStartSize ? this.Size - GameConfig.eaterStartSize : GameConfig.eaterForcingSpeedLoseSize * dT;
+    private Accelerate(dT: number) {
+        if (this.isAccelerate && this.Size > GameConfig.eaterStartSize) {
+            this.SpeedUp = GameConfig.eaterAccelerateSpeedUp;
+            var loseSize = this.Size - GameConfig.eaterAccelerateSpeedLoseSize * dT < GameConfig.eaterStartSize ? this.Size - GameConfig.eaterStartSize : GameConfig.eaterAccelerateSpeedLoseSize * dT;
             this.Size -= loseSize;
             this.Scene.foodMass += loseSize;
         }
@@ -154,7 +154,7 @@ class Bot extends Eater {
                 var thisVector = new Vector(this.pos.X, this.pos.Y);
                 if (nearestEater.Size + GameConfig.botAngry < this.Size) {
                     this.VectorSpeedUp = eaterVector.sub(thisVector).normalize();
-                    this.isForcing = nearestEater.Size + GameConfig.botAngry+GameConfig.botAngryForcingDistCoef * minDistEater < this.Size;
+                    this.isAccelerate = nearestEater.Size + GameConfig.botAngry+GameConfig.botAngryAccelerateDistCoef * minDistEater < this.Size;
                 }
                 else {
                     this.VectorSpeedUp = eaterVector.sub(thisVector).normalize().negative();
@@ -162,7 +162,7 @@ class Bot extends Eater {
             }
         }
         else {
-            this.isForcing = false;
+            this.isAccelerate = false;
             if (nearestFood != null) {
                 var foodVector = new Vector(nearestFood.pos.X, nearestFood.pos.Y);
                 var thisVector = new Vector(this.pos.X, this.pos.Y);
@@ -189,11 +189,11 @@ class Player extends Eater {
     }
 
     private touchStart(e: TouchEvent) {
-        this.isForcing = e.touches.length > 1; 
+        this.isAccelerate = e.touches.length > 1; 
     }
 
     private touchCancel(e: TouchEvent) {
-        this.isForcing = e.touches.length > 1; 
+        this.isAccelerate = e.touches.length > 1; 
     }
 
     private touchMove(e: TouchEvent) {
@@ -201,7 +201,7 @@ class Player extends Eater {
         var canvasPos = this.pos.toCanvas_Point();
         var playerVector = new Vector(canvasPos.X, canvasPos.Y);
         this.VectorSpeedUp = touchVector.sub(playerVector).normalize();
-        this.isForcing = e.touches.length > 1; 
+        this.isAccelerate = e.touches.length > 1; 
     }
 
     private mouseMove(e: MouseEvent) {
@@ -213,13 +213,13 @@ class Player extends Eater {
 
     private mouseDown(e: MouseEvent) {
         if (e.which == Key.MauseLeftBut) {
-            this.isForcing = true;
+            this.isAccelerate = true;
         }
     }
 
     private mouseUp(e: MouseEvent) {
         if (e.which == Key.MauseLeftBut) {
-            this.isForcing = false;
+            this.isAccelerate = false;
         }
     }
 
@@ -237,7 +237,7 @@ class Player extends Eater {
             this.VectorSpeedUp.X = -1;
         }
         if (e.keyCode == Key.Space) {
-            this.isForcing = true;
+            this.isAccelerate = true;
         }
     }
 
@@ -255,7 +255,7 @@ class Player extends Eater {
             this.VectorSpeedUp.X = 0;
         }
         if (e.keyCode == Key.Space) {
-            this.isForcing = false;
+            this.isAccelerate = false;
         }
     }
 

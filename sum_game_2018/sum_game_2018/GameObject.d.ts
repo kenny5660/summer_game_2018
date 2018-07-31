@@ -32,11 +32,11 @@ declare class Eater extends GameObject {
     SpeedUp: number;
     SpeedDown: number;
     VectorSpeedUp: Vector;
-    isForcing: boolean;
+    isAccelerate: boolean;
     constructor(Scene: SceneGame, pos: Point, Color: string);
     Draw(ctx: CanvasRenderingContext2D): void;
     Update(dT: number): void;
-    private forcing(dT);
+    private Accelerate(dT);
 }
 declare class Bot extends Eater {
     constructor(Scene: SceneGame, pos: Point, Color: string);

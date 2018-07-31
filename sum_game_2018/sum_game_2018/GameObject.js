@@ -71,7 +71,7 @@ var Eater = /** @class */ (function (_super) {
         _this.MaxSpeed = GameConfig.eaterStartMaxSpeed;
         _this.SpeedUp = GameConfig.eaterStartSpeedUp;
         _this.SpeedDown = GameConfig.eaterStartSpeedDown;
-        _this.isForcing = false;
+        _this.isAccelerate = false;
         _this.Scene = Scene;
         _this.Size = GameConfig.eaterStartSize;
         _this.Color = Color;
@@ -95,7 +95,7 @@ var Eater = /** @class */ (function (_super) {
         ctx.fillText(Math.floor(this.Size).toString(), posText.X, posText.Y);
     };
     Eater.prototype.Update = function (dT) {
-        this.forcing(dT);
+        this.Accelerate(dT);
         this.Speed.X = this.Speed.X <= this.MaxSpeed && this.Speed.X >= -this.MaxSpeed ? this.Speed.X + this.SpeedUp * this.VectorSpeedUp.X * dT : this.MaxSpeed * sign(this.Speed.X);
         this.Speed.Y = this.Speed.Y <= this.MaxSpeed && this.Speed.Y >= -this.MaxSpeed ? this.Speed.Y + this.SpeedUp * this.VectorSpeedUp.Y * dT : this.MaxSpeed * sign(this.Speed.Y);
         this.Speed.X += this.Speed.X * this.Speed.X * -GameConfig.eaterFrictionSpeedDownCoef * dT * sign(this.Speed.X);
@@ -108,10 +108,10 @@ var Eater = /** @class */ (function (_super) {
         this.Size -= loseSize;
         this.Scene.foodMass += loseSize;
     };
-    Eater.prototype.forcing = function (dT) {
-        if (this.isForcing && this.Size > GameConfig.eaterStartSize) {
-            this.SpeedUp = GameConfig.eaterForcingSpeedUp;
-            var loseSize = this.Size - GameConfig.eaterForcingSpeedLoseSize * dT < GameConfig.eaterStartSize ? this.Size - GameConfig.eaterStartSize : GameConfig.eaterForcingSpeedLoseSize * dT;
+    Eater.prototype.Accelerate = function (dT) {
+        if (this.isAccelerate && this.Size > GameConfig.eaterStartSize) {
+            this.SpeedUp = GameConfig.eaterAccelerateSpeedUp;
+            var loseSize = this.Size - GameConfig.eaterAccelerateSpeedLoseSize * dT < GameConfig.eaterStartSize ? this.Size - GameConfig.eaterStartSize : GameConfig.eaterAccelerateSpeedLoseSize * dT;
             this.Size -= loseSize;
             this.Scene.foodMass += loseSize;
         }
@@ -151,7 +151,7 @@ var Bot = /** @class */ (function (_super) {
                 var thisVector = new Vector(this.pos.X, this.pos.Y);
                 if (nearestEater.Size + GameConfig.botAngry < this.Size) {
                     this.VectorSpeedUp = eaterVector.sub(thisVector).normalize();
-                    this.isForcing = nearestEater.Size + GameConfig.botAngry + GameConfig.botAngryForcingDistCoef * minDistEater < this.Size;
+                    this.isAccelerate = nearestEater.Size + GameConfig.botAngry + GameConfig.botAngryAccelerateDistCoef * minDistEater < this.Size;
                 }
                 else {
                     this.VectorSpeedUp = eaterVector.sub(thisVector).normalize().negative();
@@ -159,7 +159,7 @@ var Bot = /** @class */ (function (_super) {
             }
         }
         else {
-            this.isForcing = false;
+            this.isAccelerate = false;
             if (nearestFood != null) {
                 var foodVector = new Vector(nearestFood.pos.X, nearestFood.pos.Y);
                 var thisVector = new Vector(this.pos.X, this.pos.Y);
@@ -186,17 +186,17 @@ var Player = /** @class */ (function (_super) {
         return _this;
     }
     Player.prototype.touchStart = function (e) {
-        this.isForcing = e.touches.length > 1;
+        this.isAccelerate = e.touches.length > 1;
     };
     Player.prototype.touchCancel = function (e) {
-        this.isForcing = e.touches.length > 1;
+        this.isAccelerate = e.touches.length > 1;
     };
     Player.prototype.touchMove = function (e) {
         var touchVector = new Vector(e.touches[0].pageX, e.touches[0].pageY);
         var canvasPos = this.pos.toCanvas_Point();
         var playerVector = new Vector(canvasPos.X, canvasPos.Y);
         this.VectorSpeedUp = touchVector.sub(playerVector).normalize();
-        this.isForcing = e.touches.length > 1;
+        this.isAccelerate = e.touches.length > 1;
     };
     Player.prototype.mouseMove = function (e) {
         var mouseVector = new Vector(e.x, e.y);
@@ -206,12 +206,12 @@ var Player = /** @class */ (function (_super) {
     };
     Player.prototype.mouseDown = function (e) {
         if (e.which == Key.MauseLeftBut) {
-            this.isForcing = true;
+            this.isAccelerate = true;
         }
     };
     Player.prototype.mouseUp = function (e) {
         if (e.which == Key.MauseLeftBut) {
-            this.isForcing = false;
+            this.isAccelerate = false;
         }
     };
     Player.prototype.keydown = function (e) {
@@ -228,7 +228,7 @@ var Player = /** @class */ (function (_super) {
             this.VectorSpeedUp.X = -1;
         }
         if (e.keyCode == Key.Space) {
-            this.isForcing = true;
+            this.isAccelerate = true;
         }
     };
     Player.prototype.keyup = function (e) {
@@ -245,7 +245,7 @@ var Player = /** @class */ (function (_super) {
             this.VectorSpeedUp.X = 0;
         }
         if (e.keyCode == Key.Space) {
-            this.isForcing = false;
+            this.isAccelerate = false;
         }
     };
     return Player;
