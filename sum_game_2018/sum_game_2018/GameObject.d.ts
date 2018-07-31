@@ -23,21 +23,22 @@ declare abstract class GameObject {
 }
 declare abstract class Eater extends GameObject {
     Size: number;
+    Scene: SceneGame;
     Color: string;
     Speed: Vector;
     MaxSpeed: number;
     SpeedUp: number;
     SpeedDown: number;
     VectorSpeedUp: Vector;
-    canvas: HTMLCanvasElement;
+    constructor(Scene: SceneGame, pos: Point, Color: string);
+    Draw(ctx: CanvasRenderingContext2D): void;
+    Update(dT: number): void;
 }
-declare class PlayerGameObject extends Eater {
-    constructor(canvas: HTMLCanvasElement, pos: Point, Color: string);
+declare class Player extends Eater {
+    constructor(Scene: SceneGame, pos: Point, Color: string);
     mouseMove(e: MouseEvent): void;
     keydown(e: KeyboardEvent): void;
     keyup(e: KeyboardEvent): void;
-    Draw(ctx: CanvasRenderingContext2D): void;
-    Update(dT: number): void;
 }
 declare class Food extends GameObject {
     Size: number;

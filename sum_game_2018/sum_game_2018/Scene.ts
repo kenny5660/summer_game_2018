@@ -62,7 +62,7 @@ class SceneGame extends Scene {
     foodMass: number;
     private sizeForScale: number;
     private SumDeltaSizeCoef: number;
-    private player: PlayerGameObject;
+    private player: Player;
     constructor(canvas: HTMLCanvasElement, width: number,height:number, backgroundColor: string | CanvasPattern) {
         var gameCamera = new Camera(canvas, new Point(0, 0), GameConfig.defaultCanvasWidth, GameConfig.defaultCanvasHeght);
         super(canvas, gameCamera, backgroundColor);
@@ -72,7 +72,7 @@ class SceneGame extends Scene {
         this.height = height
         this.SumDeltaSizeCoef = 1;
         this.foodMass = GameConfig.foodMass
-        this.sizeForScale = GameConfig.startEaterSize + GameConfig.deltaPlayerSizeForScale;
+        this.sizeForScale = GameConfig.eaterStartSize + GameConfig.deltaPlayerSizeForScale;
         this.generateEaters();
       
     }
@@ -107,14 +107,14 @@ class SceneGame extends Scene {
         }
     }
     private generateEaters() {
-        this.player = new PlayerGameObject(this.Canvas, new Point(Math.abs(Math.random() * this.width), Math.abs(Math.random() * this.height)), "green");
+        this.player = new Player(this, new Point(Math.abs(Math.random() * this.width), Math.abs(Math.random() * this.height)), "green");
         this.foodMass -= this.player.Size / GameConfig.defaultFoodSizeCoef;
         this.eaters.push(this.player);
         this.Camera.setFollowObject(this.player);
     }
     private generateFood() {
         var foodSize: number;
-        for (; this.foodMass > 0; ) {
+        for (; this.foodMass >= 1; ) {
             foodSize = Math.abs(Math.random()) < GameConfig.food2xChance ? 2 : 1
             this.foods.push(new Food(new Point(Math.abs(Math.random() * this.width), Math.abs(Math.random() * this.height)), foodSize * GameConfig.foodSize, "purple"));
             this.foodMass -= foodSize * GameConfig.foodSize * GameConfig.defaultFoodSizeCoef;
