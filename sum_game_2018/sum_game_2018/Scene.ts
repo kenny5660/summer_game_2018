@@ -17,7 +17,7 @@
     }
     Update(dT: number) {
         if (this.followObject.Size * Point.globalScale > GameConfig.maxCameraPlayerSize) {
-            var deltaSizeCoef = (GameConfig.minCameraPlayerSize+20) / (this.followObject.Size);
+            var deltaSizeCoef = (GameConfig.minCameraPlayerSize) / (this.followObject.Size);
 
             this.width /= deltaSizeCoef;
             this.height /= deltaSizeCoef;

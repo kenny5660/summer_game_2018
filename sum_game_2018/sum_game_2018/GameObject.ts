@@ -196,12 +196,13 @@ class Player extends Eater {
         this.isAccelerate = e.touches.length > 1; 
     }
 
-    private touchMove(e: TouchEvent) {
+    private touchMove(e: TouchEvent): boolean {
         var touchVector = new Vector(e.touches[0].pageX, e.touches[0].pageY);
         var canvasPos = this.pos.toCanvas_Point();
         var playerVector = new Vector(canvasPos.X, canvasPos.Y);
         this.VectorSpeedUp = touchVector.sub(playerVector).normalize();
         this.isAccelerate = e.touches.length > 1; 
+        return false;
     }
 
     private mouseMove(e: MouseEvent) {

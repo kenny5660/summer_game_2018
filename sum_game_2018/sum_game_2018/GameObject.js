@@ -197,6 +197,7 @@ var Player = /** @class */ (function (_super) {
         var playerVector = new Vector(canvasPos.X, canvasPos.Y);
         this.VectorSpeedUp = touchVector.sub(playerVector).normalize();
         this.isAccelerate = e.touches.length > 1;
+        return false;
     };
     Player.prototype.mouseMove = function (e) {
         var mouseVector = new Vector(e.x, e.y);

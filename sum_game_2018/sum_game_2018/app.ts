@@ -1,5 +1,7 @@
 ﻿document.addEventListener("DOMContentLoaded", ready);
+window.document.hasFocus = function () { return true; }
 function ready() {
+
     var canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("game_canvas");
     Game.Start(canvas);
 }
@@ -32,6 +34,7 @@ class Game {
         }
         resizeCanvas();
 
+        window.addEventListener('focus', () => lastTime = Date.now(), false);
 
         function drawStuff() {
         //    Game.CurScene.UpdateObjects(0);
