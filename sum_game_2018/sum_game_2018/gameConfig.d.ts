@@ -1,5 +1,4 @@
 declare class GameConfig {
-    static deltaPlayerSizeForScale: number;
     static maxCameraPlayerSize: number;
     static minCameraPlayerSize: number;
     static eaterStartSize: number;
@@ -19,4 +18,6 @@ declare class GameConfig {
     static foodMass: number;
     static food2xChance: number;
     static botNumber: number;
+    static botDistAtackEater: number;
+    static botAngry: number;
 }

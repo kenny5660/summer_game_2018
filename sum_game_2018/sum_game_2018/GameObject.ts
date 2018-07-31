@@ -15,6 +15,11 @@ class Vector {
         this.Y /= d;
         return this;
     }
+    negative():Vector {
+        this.X = -this.X;
+        this.Y = -this.Y;
+        return this;
+    }
 
 }
 class Point {
@@ -44,13 +49,16 @@ class Point {
         var Y = Math.floor(this.Y * Point.globalScale) + Point.globalOffset.Y;
         return new Point(X, Y);
     }
+    distToPoint(b: Point): number {
+        return Math.sqrt((this.X - b.X) * (this.X - b.X) + (this.Y - b.Y) * (this.Y - b.Y));
+    }
 }
 abstract class GameObject {
     pos: Point;
     abstract Draw(ctx: CanvasRenderingContext2D);
     abstract Update(dT: number);
 }
-abstract class Eater extends GameObject {
+class Eater extends GameObject {
     Size: number;
     Scene: SceneGame;
     Color: string;
@@ -107,6 +115,54 @@ abstract class Eater extends GameObject {
         this.Size -= loseSize;
         this.Scene.foodMass += loseSize;
     }
+}
+class Bot extends Eater {
+    constructor(Scene: SceneGame, pos: Point, Color: string) {
+        super(Scene, pos, Color);
+    }
+    Update(dT: number) {
+        var nearestEater: Eater = null;
+        var minDistEater = Number.MAX_VALUE
+        var nearestFood: Food = null;
+        var minDistFood = Number.MAX_VALUE
+
+        for (var i = this.Scene.eaters.length - 1; i >= 0; --i) {
+            var dist = this.pos.distToPoint(this.Scene.eaters[i].pos);
+            if (minDistEater > dist && this != this.Scene.eaters[i]) {
+                minDistEater = dist;
+                nearestEater = this.Scene.eaters[i];
+            }
+        }
+        for (var i = this.Scene.foods.length - 1; i >= 0; --i) {
+            var dist = this.pos.distToPoint(this.Scene.foods[i].pos);
+            if (minDistFood > dist) {
+                minDistFood = dist;
+                nearestFood = this.Scene.foods[i];
+            }
+        }
+
+        if (minDistEater - this.Size / 2 < GameConfig.botDistAtackEater) {
+            if (nearestEater != null) {
+                var eaterVector = new Vector(nearestEater.pos.X, nearestEater.pos.Y);
+                var thisVector = new Vector(this.pos.X, this.pos.Y);
+                if (nearestEater.Size + GameConfig.botAngry < this.Size) {
+                    this.VectorSpeedUp = eaterVector.sub(thisVector).normalize();
+                }
+                else {
+                    this.VectorSpeedUp = eaterVector.sub(thisVector).normalize().negative();
+                }
+            }
+        }
+        else {
+            if (nearestFood != null) {
+                var foodVector = new Vector(nearestFood.pos.X, nearestFood.pos.Y);
+                var thisVector = new Vector(this.pos.X, this.pos.Y);
+                this.VectorSpeedUp = foodVector.sub(thisVector).normalize();
+            }
+        }
+        super.Update(dT);
+    }
+
 }
 class Player extends Eater {
 

@@ -5,6 +5,7 @@ declare class Vector {
     constructor(X: number, Y: number);
     sub(b: Vector): Vector;
     normalize(): Vector;
+    negative(): Vector;
 }
 declare class Point {
     X: number;
@@ -15,13 +16,14 @@ declare class Point {
     static zoom(newScale: number, scalePoint: Point): void;
     toWorld_Point(): Point;
     toCanvas_Point(): Point;
+    distToPoint(b: Point): number;
 }
 declare abstract class GameObject {
     pos: Point;
     abstract Draw(ctx: CanvasRenderingContext2D): any;
     abstract Update(dT: number): any;
 }
-declare abstract class Eater extends GameObject {
+declare class Eater extends GameObject {
     Size: number;
     Scene: SceneGame;
     Color: string;
@@ -32,6 +34,10 @@ declare abstract class Eater extends GameObject {
     VectorSpeedUp: Vector;
     constructor(Scene: SceneGame, pos: Point, Color: string);
     Draw(ctx: CanvasRenderingContext2D): void;
+    Update(dT: number): void;
+}
+declare class Bot extends Eater {
+    constructor(Scene: SceneGame, pos: Point, Color: string);
     Update(dT: number): void;
 }
 declare class Player extends Eater {
