@@ -86,12 +86,20 @@ class SceneGame extends Scene {
         super.UpdateObjects(dT);
         this.collisions();
         this.generateFood();
-        if (this.player.Size >= this.sizeForScale) {
-            var deltaSizeCoef = (this.player.Size - GameConfig.deltaPlayerSizeForScale * this.SumDeltaSizeCoef) / this.player.Size;
-            this.SumDeltaSizeCoef +=0.5;
+        if (this.player.Size * Point.globalScale >= GameConfig.maxCameraPlayerSize) {
+            var deltaSizeCoef = (GameConfig.minCameraPlayerSize+5) / this.player.Size;
+   
             this.Camera.width /= deltaSizeCoef;
             this.Camera.height /= deltaSizeCoef;
-            this.sizeForScale += GameConfig.deltaPlayerSizeForScale *this.SumDeltaSizeCoef;
+
+            this.Camera.Update(dT);
+        }
+        if (this.player.Size * Point.globalScale < GameConfig.minCameraPlayerSize) {
+            var deltaSizeCoef = this.player.Size / GameConfig.eaterStartSize;
+
+            this.Camera.width /= deltaSizeCoef;
+            this.Camera.height /= deltaSizeCoef;
+
             this.Camera.Update(dT);
         }
     }
