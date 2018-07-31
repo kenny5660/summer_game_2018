@@ -39,9 +39,12 @@ var Game = /** @class */ (function () {
         function GameLoop() {
             var now = Date.now();
             var dT = (now - lastTime) / 1000.0;
-            if (dT < 1) {
+            if (dT < 0.35) {
                 Game.CurScene.UpdateObjects(dT);
                 Game.CurScene.DrawObjects();
+            }
+            else {
+                console.log(dT);
             }
             lastTime = now;
             window.requestAnimationFrame(GameLoop);
