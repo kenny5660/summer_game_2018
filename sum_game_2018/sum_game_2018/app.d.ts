@@ -4,6 +4,3 @@ declare class Game {
     static Canvas: HTMLCanvasElement;
     static Start(canvas: HTMLCanvasElement): void;
 }
-declare class GameAgar {
-    gameScene: Scene;
-}

@@ -26,7 +26,7 @@
             this.width = this.canvas.width / deltaSizeCoef;
             this.height = this.canvas.height / deltaSizeCoef;
         }
-        
+
         Point.globalScale = 1 / Math.max(this.width / this.canvas.width, this.height / this.canvas.height);
         if (this.followObject != null) {
             this.pos.X = Math.floor(-this.followObject.pos.X * Point.globalScale + this.canvas.width / 2);
@@ -57,7 +57,7 @@ class Scene {
         for (var i = this.GameObjects.length - 1; i >= 0; --i) {
             this.GameObjects[i].Update(dT);
         }
-       
+
     }
     DrawObjects() {
         this.ctx.fillStyle = this.BackgroundColor;
@@ -87,7 +87,7 @@ class SceneGame extends Scene {
     }
 
     UpdateObjects(dT: number) {
-        
+
         for (var i = this.foods.length - 1; i >= 0; --i) {
             this.foods[i].Update(dT);
         }
@@ -97,7 +97,7 @@ class SceneGame extends Scene {
         super.UpdateObjects(dT);
         this.collisions();
         this.generateFood();
-       
+
     }
 
     DrawObjects() {
@@ -122,14 +122,14 @@ class SceneGame extends Scene {
             this.foodMass -= bot.Size;
             this.eaters.push(bot);
         }
-          this.Camera.setFollowObject(this.player);
-       // this.Camera.setFollowObject(this.eaters[2]);
+        this.Camera.setFollowObject(this.player);
+        // this.Camera.setFollowObject(this.eaters[2]);
     }
 
     private generateFood() {
         for (; this.foodMass >= 1;) {
 
-           var foodSizeDB = Math.abs(Math.random()) < GameConfig.food2xChance ? 2 : 1
+            var foodSizeDB = Math.abs(Math.random()) < GameConfig.food2xChance ? 2 : 1
             this.foods.push(new Food(new Point(Math.abs(Math.random() * this.width), Math.abs(Math.random() * this.height)), foodSizeDB * GameConfig.foodSize, GameConfig.foodCost * foodSizeDB, "purple"));
             this.foodMass -= GameConfig.foodCost * foodSizeDB;
         }
@@ -160,10 +160,7 @@ class SceneGame extends Scene {
                     }
                 }
             }
-
-            
         }
-
     }
 }
 
@@ -173,5 +170,5 @@ class Collisions {
         //(x2-x1)^2 + (y1-y2)^2 <= (r1-r2)^2
         return (posA.X - posB.X) * (posA.X - posB.X) + (posA.Y - posB.Y) * (posA.Y - posB.Y) <= (rA - rB) * (rA - rB);
     }
-
 }
+
