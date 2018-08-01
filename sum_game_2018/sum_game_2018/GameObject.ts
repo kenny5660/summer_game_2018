@@ -182,7 +182,7 @@ class Player extends Eater {
         addEventListener("keyup", (e: KeyboardEvent) => input.keyup(e));
         addEventListener("touchstart", (e: TouchEvent) => input.touchStart(e));
         addEventListener("touchstart", (e: TouchEvent) => input.touchCancel(e));
-        addEventListener("touchmove", (e: TouchEvent) => input.touchMove(e));
+        document.addEventListener("touchmove", (e: TouchEvent) => { e.preventDefault(); input.touchMove(e); }, { passive: false });
         addEventListener("mousemove", (e: MouseEvent) => input.mouseMove(e));
         addEventListener("mousedown", (e: MouseEvent) => input.mouseDown(e));
         addEventListener("mouseup", (e: MouseEvent) => input.mouseUp(e));

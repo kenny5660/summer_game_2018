@@ -179,7 +179,7 @@ var Player = /** @class */ (function (_super) {
         addEventListener("keyup", function (e) { return input.keyup(e); });
         addEventListener("touchstart", function (e) { return input.touchStart(e); });
         addEventListener("touchstart", function (e) { return input.touchCancel(e); });
-        addEventListener("touchmove", function (e) { return input.touchMove(e); });
+        document.addEventListener("touchmove", function (e) { e.preventDefault(); input.touchMove(e); }, { passive: false });
         addEventListener("mousemove", function (e) { return input.mouseMove(e); });
         addEventListener("mousedown", function (e) { return input.mouseDown(e); });
         addEventListener("mouseup", function (e) { return input.mouseUp(e); });
