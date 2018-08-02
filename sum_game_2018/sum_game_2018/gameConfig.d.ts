@@ -7,7 +7,7 @@ declare class GameConfig {
     static eaterStartSpeedDown: number;
     static eaterFrictionSpeedDownCoef: number;
     static eaterAccelerateSpeedUp: number;
-    static eaterAccelerateSpeedLoseSize: number;
+    static eaterAccelerateSpeedLoseSizeCoef: number;
     static eaterSizeTextFont: string;
     static eaterSizeTextFontSizeCoef: number;
     static eaterSizeTextFontColor: string;

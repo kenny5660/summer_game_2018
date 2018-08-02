@@ -12,25 +12,18 @@ function ready() {
     foodKDtree.insert(new Food(new Point(35, 45), 10, 10, "red"));
     // foodKDtree.deleteNode(firstFood);
     var foodNEarest = foodKDtree.nearest(new Food(new Point(20, 20), 10, 10, "red"));
-    Game.Start(canvas);
+    GameEngine.Start(canvas);
 }
-var Game = /** @class */ (function () {
-    function Game() {
+var GameEngine = /** @class */ (function () {
+    function GameEngine() {
     }
-    Game.Start = function (canvas) {
+    GameEngine.Start = function (canvas) {
         this.Canvas = canvas;
         this.Canvas.width = window.innerWidth;
         this.Canvas.height = window.innerHeight;
         var ctx = this.Canvas.getContext('2d');
-        var gameScene = new SceneGame(canvas, GameConfig.gameSceneWidth, GameConfig.gameSceneHeight, "white");
-        this.CurScene = gameScene;
-        var mainMenuScene = new Scene(canvas, new Camera(canvas, new Point(0, 0), GameConfig.canvasWidthDefault, GameConfig.canvasHeghtDefault), "grey");
-        var startButton = new MenuButton("START", new Point(300, 300));
-        startButton.width = 400;
-        startButton.height = 150;
-        startButton.fontSize = 5;
-        mainMenuScene.GameObjects.push(startButton);
-        mainMenuScene.GameObjects.push(new MenuButton("EXIT", new Point(400, 490)));
+        this.MainMenu = new MainMenu(document.getElementById("main_menu"));
+        this.MainMenu.show();
         window.addEventListener('resize', resizeCanvas, false);
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -43,15 +36,15 @@ var Game = /** @class */ (function () {
         };
         function drawStuff() {
             //    Game.CurScene.UpdateObjects(0);
-            Game.CurScene.DrawObjects();
+            GameEngine.CurScene.DrawObjects();
         }
         var lastTime = Date.now();
         function GameLoop() {
             var now = Date.now();
             var dT = (now - lastTime) / 1000.0;
             if (dT < 0.35) {
-                Game.CurScene.UpdateObjects(dT);
-                Game.CurScene.DrawObjects();
+                GameEngine.CurScene.UpdateObjects(dT);
+                GameEngine.CurScene.DrawObjects();
             }
             else {
                 console.log(dT);
@@ -62,6 +55,9 @@ var Game = /** @class */ (function () {
         ;
         window.requestAnimationFrame(GameLoop);
     };
-    return Game;
+    GameEngine.changeScene = function (Scene) {
+        this.CurScene = Scene;
+    };
+    return GameEngine;
 }());
 //# sourceMappingURL=app.js.map

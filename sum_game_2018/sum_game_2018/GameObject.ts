@@ -114,7 +114,7 @@ class Eater extends GameObject {
     private Accelerate(dT: number) {
         if (this.isAccelerate && this.Size > GameConfig.eaterStartSize) {
             this.SpeedUp = GameConfig.eaterAccelerateSpeedUp;
-            var loseSize = this.Size - GameConfig.eaterAccelerateSpeedLoseSize * dT < GameConfig.eaterStartSize ? this.Size - GameConfig.eaterStartSize : GameConfig.eaterAccelerateSpeedLoseSize * dT;
+            var loseSize = this.Size - GameConfig.eaterAccelerateSpeedLoseSizeCoef * this.Size * dT < GameConfig.eaterStartSize ? this.Size - GameConfig.eaterStartSize : GameConfig.eaterAccelerateSpeedLoseSizeCoef * this.Size * dT;
             this.Size -= loseSize;
             this.Scene.foodMass += loseSize;
         }
@@ -154,7 +154,7 @@ class Bot extends Eater {
                 var thisVector = new Vector(this.pos.X, this.pos.Y);
                 if (nearestEater.Size + GameConfig.botAngry < this.Size) {
                     this.VectorSpeedUp = eaterVector.sub(thisVector).normalize();
-                    this.isAccelerate = nearestEater.Size + GameConfig.botAngry+GameConfig.botAngryAccelerateDistCoef * minDistEater < this.Size;
+                    this.isAccelerate = nearestEater.Size + GameConfig.botAngry + GameConfig.botAngryAccelerateDistCoef * (minDistEater + this.Size * GameConfig.eaterAccelerateSpeedLoseSizeCoef) < this.Size;
                 }
                 else {
                     this.VectorSpeedUp = eaterVector.sub(thisVector).normalize().negative();

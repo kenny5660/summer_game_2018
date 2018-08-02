@@ -4,16 +4,34 @@
     <meta charset="utf-8" />
     <title>TypeScript HTML App</title>
     <link rel="stylesheet" href="app.css" type="text/css" />
+    <link rel="stylesheet" href="circleButtons.css" type="text/css" />
+    <link rel="stylesheet" href="InputTextGradient.css" type="text/css" />
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0,initial-scale=1.0, user-scalable=no" />
     <script src="Scene.js"></script>
     <script src="GameObject.js"></script>
     <script src="app.js"></script>
     <script src="Key.enum.js"></script>
     <script src="gameConfig.js"></script>
-    <script src="mainMenu.js"></script>
+    <script src="GUI.js"></script>
     <script src="KDtree.js"></script>
 </head>
 <body>
     <canvas id="game_canvas"></canvas>
+    <div class="gui menu" id="main_menu">
+        <div class="game_title_container">
+            <span class="game_title">iPoint.io</span>
+        </div>
+        <div class="nick_start_but_container">
+            <div class="inputGradientContainer">
+                <span class="inputGradient">
+                    <input type="text" placeholder="Your nickname" id="textFieldNickName">
+                    <span></span>
+                </span>
+            </div>
+            <ul class="round_buttons">
+                <li><a href="#" class="round_button green" id="start_button">Start<span class="round_button">You are ready?</span></a></li>
+            </ul>
+        </div>
+    </div>
 </body>
 </html>

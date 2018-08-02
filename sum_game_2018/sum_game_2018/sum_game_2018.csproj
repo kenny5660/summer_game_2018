@@ -84,10 +84,12 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
+    <Content Include="circleButtons.css" />
     <TypeScriptCompile Include="GameConfig.ts" />
     <TypeScriptCompile Include="GameObject.ts" />
+    <Content Include="InputTextGradient.css" />
     <TypeScriptCompile Include="Key.enum.ts" />
-    <TypeScriptCompile Include="mainMenu.ts" />
+    <TypeScriptCompile Include="GUI.ts" />
     <TypeScriptCompile Include="Scene.ts" />
   </ItemGroup>
   <ItemGroup>

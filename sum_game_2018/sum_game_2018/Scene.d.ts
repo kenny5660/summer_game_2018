@@ -25,12 +25,16 @@ declare class SceneGame extends Scene {
     width: number;
     height: number;
     foodMass: number;
-    private player;
-    constructor(canvas: HTMLCanvasElement, width: number, height: number, backgroundColor: string | CanvasPattern);
+    foodMassFirst: number;
+    protected player: Player;
+    constructor(canvas: HTMLCanvasElement, width: number, height: number, foodMassFirst: number, backgroundColor: string | CanvasPattern);
+    restart(): void;
     UpdateObjects(dT: number): void;
     DrawObjects(): void;
-    private generateEaters();
+    protected generateEaters(): void;
     private generateFood();
+    protected eaterEaterCollision(big: Eater, small: Eater): boolean;
+    protected eaterFoodCollision(eater: Eater, food: Food): boolean;
     private collisions();
 }
 declare class Collisions {

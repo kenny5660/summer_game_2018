@@ -72,16 +72,26 @@ class SceneGame extends Scene {
     width: number;
     height: number;
     foodMass: number;
-    private player: Player;
+    foodMassFirst: number;
+    protected player: Player;
 
-    constructor(canvas: HTMLCanvasElement, width: number, height: number, backgroundColor: string | CanvasPattern) {
+    constructor(canvas: HTMLCanvasElement, width: number, height: number, foodMassFirst: number, backgroundColor: string | CanvasPattern) {
         var gameCamera = new Camera(canvas, new Point(0, 0), GameConfig.canvasWidthDefault, GameConfig.canvasHeghtDefault);
         super(canvas, gameCamera, backgroundColor);
         this.eaters = [];
         this.foods = [];
         this.width = width;
         this.height = height;
-        this.foodMass = GameConfig.foodMass
+        this.foodMassFirst = foodMassFirst;
+        this.foodMass = this.foodMassFirst;
+        this.generateEaters();
+        this.generateFood();
+    }
+     restart() {
+        this.eaters.splice(0, this.eaters.length);
+        this.foods.splice(0, this.foods.length);
+
+        this.foodMass = this.foodMassFirst;
         this.generateEaters();
         this.generateFood();
     }
@@ -112,7 +122,7 @@ class SceneGame extends Scene {
         }
     }
 
-    private generateEaters() {
+    protected generateEaters() {
         this.player = new Player(this, new Point(Math.abs(Math.random() * this.width), Math.abs(Math.random() * this.height)), "green");
         this.foodMass -= this.player.Size;
         this.eaters.push(this.player);
@@ -135,26 +145,45 @@ class SceneGame extends Scene {
         }
     }
 
+    protected eaterEaterCollision(big: Eater, small: Eater): boolean {
+        if (small == this.player) {
+            //game over
+            this.restart();
+            return false;
+        }
+        return true;
+    }
+    protected eaterFoodCollision(eater: Eater, food: Food): boolean {
+        if (eater == this.player) {
+            //game win
+        }
+        return true;
+    }
     private collisions() {
         for (var i = this.eaters.length - 1; i >= 0; --i) {
             for (var j = this.foods.length - 1; j >= 0; --j) {
                 if (Collisions.CircleInCircle(this.eaters[i].pos, this.eaters[i].Size, this.foods[j].pos, this.foods[j].Size)) {
+
                     this.eaters[i].Size += this.foods[j].Cost;
                     this.foods.splice(j, 1);
-
+                    this.eaterFoodCollision(this.eaters[i], this.foods[j]);
                 }
             }
             for (var j = this.eaters.length - 1; j >= 0; --j) {
                 if (i != j) {
                     if (Collisions.CircleInCircle(this.eaters[i].pos, this.eaters[i].Size, this.eaters[j].pos, this.eaters[j].Size)) {
                         if (this.eaters[i].Size > this.eaters[j].Size) {
-                            this.eaters[i].Size += this.eaters[j].Size;
-                            this.eaters.splice(j, 1);
+                            if (this.eaterEaterCollision(this.eaters[j], this.eaters[i])) {
+                                this.eaters[i].Size += this.eaters[j].Size;
+                                this.eaters.splice(j, 1);
+                            }
                             break;
                         }
                         if (this.eaters[i].Size < this.eaters[j].Size) {
-                            this.eaters[j].Size += this.eaters[i].Size;
-                            this.eaters.splice(i, 1);
+                            if (this.eaterEaterCollision(this.eaters[j], this.eaters[i])) {
+                                this.eaters[j].Size += this.eaters[i].Size;
+                                this.eaters.splice(i, 1);
+                            }
                             break;
                         }
                     }

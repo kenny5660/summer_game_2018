@@ -68,7 +68,7 @@ var Scene = /** @class */ (function () {
 }());
 var SceneGame = /** @class */ (function (_super) {
     __extends(SceneGame, _super);
-    function SceneGame(canvas, width, height, backgroundColor) {
+    function SceneGame(canvas, width, height, foodMassFirst, backgroundColor) {
         var _this = this;
         var gameCamera = new Camera(canvas, new Point(0, 0), GameConfig.canvasWidthDefault, GameConfig.canvasHeghtDefault);
         _this = _super.call(this, canvas, gameCamera, backgroundColor) || this;
@@ -76,11 +76,19 @@ var SceneGame = /** @class */ (function (_super) {
         _this.foods = [];
         _this.width = width;
         _this.height = height;
-        _this.foodMass = GameConfig.foodMass;
+        _this.foodMassFirst = foodMassFirst;
+        _this.foodMass = _this.foodMassFirst;
         _this.generateEaters();
         _this.generateFood();
         return _this;
     }
+    SceneGame.prototype.restart = function () {
+        this.eaters.splice(0, this.eaters.length);
+        this.foods.splice(0, this.foods.length);
+        this.foodMass = this.foodMassFirst;
+        this.generateEaters();
+        this.generateFood();
+    };
     SceneGame.prototype.UpdateObjects = function (dT) {
         for (var i = this.foods.length - 1; i >= 0; --i) {
             this.foods[i].Update(dT);
@@ -122,25 +130,44 @@ var SceneGame = /** @class */ (function (_super) {
             this.foodMass -= GameConfig.foodCost * foodSizeDB;
         }
     };
+    SceneGame.prototype.eaterEaterCollision = function (big, small) {
+        if (small == this.player) {
+            //game over
+            this.restart();
+            return false;
+        }
+        return true;
+    };
+    SceneGame.prototype.eaterFoodCollision = function (eater, food) {
+        if (eater == this.player) {
+            //game win
+        }
+        return true;
+    };
     SceneGame.prototype.collisions = function () {
         for (var i = this.eaters.length - 1; i >= 0; --i) {
             for (var j = this.foods.length - 1; j >= 0; --j) {
                 if (Collisions.CircleInCircle(this.eaters[i].pos, this.eaters[i].Size, this.foods[j].pos, this.foods[j].Size)) {
                     this.eaters[i].Size += this.foods[j].Cost;
                     this.foods.splice(j, 1);
+                    this.eaterFoodCollision(this.eaters[i], this.foods[j]);
                 }
             }
             for (var j = this.eaters.length - 1; j >= 0; --j) {
                 if (i != j) {
                     if (Collisions.CircleInCircle(this.eaters[i].pos, this.eaters[i].Size, this.eaters[j].pos, this.eaters[j].Size)) {
                         if (this.eaters[i].Size > this.eaters[j].Size) {
-                            this.eaters[i].Size += this.eaters[j].Size;
-                            this.eaters.splice(j, 1);
+                            if (this.eaterEaterCollision(this.eaters[j], this.eaters[i])) {
+                                this.eaters[i].Size += this.eaters[j].Size;
+                                this.eaters.splice(j, 1);
+                            }
                             break;
                         }
                         if (this.eaters[i].Size < this.eaters[j].Size) {
-                            this.eaters[j].Size += this.eaters[i].Size;
-                            this.eaters.splice(i, 1);
+                            if (this.eaterEaterCollision(this.eaters[j], this.eaters[i])) {
+                                this.eaters[j].Size += this.eaters[i].Size;
+                                this.eaters.splice(i, 1);
+                            }
                             break;
                         }
                     }
