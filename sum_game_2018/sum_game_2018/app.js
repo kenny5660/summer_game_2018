@@ -22,7 +22,7 @@ var GameEngine = /** @class */ (function () {
         this.Canvas.width = window.innerWidth;
         this.Canvas.height = window.innerHeight;
         var ctx = this.Canvas.getContext('2d');
-        this.MainMenu = new MainMenu(document.getElementById("main_menu"));
+        this.MainMenu = new MainMenu();
         this.MainMenu.show();
         window.addEventListener('resize', resizeCanvas, false);
         function resizeCanvas() {

@@ -10,15 +10,39 @@ class Menu {
         this.container.style.display = "none";
     }
 }
+class GameOverMenu extends Menu {
+    score: number;
+    restartBut: HTMLElement;
+    scoreField: HTMLSpanElement;
+    Scene: SceneGame;
+    constructor(score: number, Scene: SceneGame) {
+        super();
+        this.container = document.getElementById("game_over_menu");
+        this.score = score;
+        this.restartBut = document.getElementById("restart_button");
+        this.scoreField = document.getElementById("game_over_score");
+        this.Scene = Scene;
+        var input = this;
+        this.restartBut.addEventListener("click", (e: Event) => input.clickReStartBut());
+    }
+    show() {
+        super.show();
+        this.scoreField.innerHTML = this.score.toString();
+    }
+    clickReStartBut() {
+        this.Scene.restart();
+        this.hide();
+    }
+}
 class MainMenu extends Menu {
     startBut: HTMLElement;
     FieldNickName: HTMLInputElement;
     sceneBackWidth = 15000;
     sceneBackHeight = 15000;
     sceneBackFoodMass = 15000;
-    constructor(container: HTMLElement) {
+    constructor() {
         super();
-        this.container = container;
+        this.container = document.getElementById("main_menu");
         this.startBut = document.getElementById("start_button");
         this.FieldNickName = <HTMLInputElement>document.getElementById("textFieldNickName");
         var input = this;

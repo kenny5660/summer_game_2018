@@ -24,14 +24,37 @@ var Menu = /** @class */ (function () {
     };
     return Menu;
 }());
+var GameOverMenu = /** @class */ (function (_super) {
+    __extends(GameOverMenu, _super);
+    function GameOverMenu(score, Scene) {
+        var _this = _super.call(this) || this;
+        _this.container = document.getElementById("game_over_menu");
+        _this.score = score;
+        _this.restartBut = document.getElementById("restart_button");
+        _this.scoreField = document.getElementById("game_over_score");
+        _this.Scene = Scene;
+        var input = _this;
+        _this.restartBut.addEventListener("click", function (e) { return input.clickReStartBut(); });
+        return _this;
+    }
+    GameOverMenu.prototype.show = function () {
+        _super.prototype.show.call(this);
+        this.scoreField.innerHTML = this.score.toString();
+    };
+    GameOverMenu.prototype.clickReStartBut = function () {
+        this.Scene.restart();
+        this.hide();
+    };
+    return GameOverMenu;
+}(Menu));
 var MainMenu = /** @class */ (function (_super) {
     __extends(MainMenu, _super);
-    function MainMenu(container) {
+    function MainMenu() {
         var _this = _super.call(this) || this;
         _this.sceneBackWidth = 15000;
         _this.sceneBackHeight = 15000;
         _this.sceneBackFoodMass = 15000;
-        _this.container = container;
+        _this.container = document.getElementById("main_menu");
         _this.startBut = document.getElementById("start_button");
         _this.FieldNickName = document.getElementById("textFieldNickName");
         var input = _this;

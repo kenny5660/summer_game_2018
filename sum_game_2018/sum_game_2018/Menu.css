@@ -1,0 +1,58 @@
+﻿.menu .nick_start_but_container {
+    margin: 0;
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+
+.game_title_container {
+    margin: 0;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+
+.game_title {
+    text-align: center;
+    font-size: 70pt;
+    color: #FF5722;
+ }
+.menu .restart_but_container {
+    margin: 0;
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+.game_over_title_Container {
+    margin: 0;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+.game_over_title {
+    text-align: center;
+    font-size: 90pt;
+    color: #ff0000;
+}
+.score_Container {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+
+.score_title {
+    text-align: center;
+    font-size: 50pt;
+    color: #FF5722;
+}

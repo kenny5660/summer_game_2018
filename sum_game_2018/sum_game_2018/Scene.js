@@ -133,9 +133,9 @@ var SceneGame = /** @class */ (function (_super) {
     };
     SceneGame.prototype.eaterEaterCollision = function (big, small) {
         if (small == this.player) {
-            //game over
-            this.restart();
-            return false;
+            var game_over_menu = new GameOverMenu(Math.floor(this.player.Size), this);
+            game_over_menu.show();
+            return true;
         }
         return true;
     };
@@ -158,7 +158,7 @@ var SceneGame = /** @class */ (function (_super) {
                 if (i != j) {
                     if (Collisions.CircleInCircle(this.eaters[i].pos, this.eaters[i].Size, this.eaters[j].pos, this.eaters[j].Size)) {
                         if (this.eaters[i].Size > this.eaters[j].Size) {
-                            if (this.eaterEaterCollision(this.eaters[j], this.eaters[i])) {
+                            if (this.eaterEaterCollision(this.eaters[i], this.eaters[j])) {
                                 this.eaters[i].Size += this.eaters[j].Size;
                                 this.eaters.splice(j, 1);
                             }

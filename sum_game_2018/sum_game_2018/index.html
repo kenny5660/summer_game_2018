@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="app.css" type="text/css" />
     <link rel="stylesheet" href="circleButtons.css" type="text/css" />
     <link rel="stylesheet" href="InputTextGradient.css" type="text/css" />
-    <link rel="stylesheet" href="mainMenu.css" type="text/css" />
+    <link rel="stylesheet" href="Menu.css" type="text/css" />
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0,initial-scale=1.0, user-scalable=no" />
     <script src="Scene.js"></script>
     <script src="GameObject.js"></script>
@@ -36,9 +36,19 @@
         </div>
     </div>
 
-    <!--<div class="gui menu" id="game_over_menu">
-        
-    </div>-->
+    <div class="gui menu" id="game_over_menu">
+        <div class="game_over_title_Container">
+            <span class="game_over_title">Game Over</span>
+        </div>
+        <div class="score_Container">
+            <span class="score_title">Your score: <span id="game_over_score"></span> </span>
+        </div>
+        <div class="restart_but_container">
+            <ul class="round_buttons">
+                <li><a href="#" class="round_button green" id="restart_button">Restart<span class="round_button">You are ready?</span></a></li>
+            </ul>
+        </div>
+    </div>
 
 </body>
 </html>

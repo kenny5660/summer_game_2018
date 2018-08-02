@@ -19,9 +19,9 @@
     static foodCost = 2;
     static canvasWidthDefault = 1536;
     static canvasHeghtDefault = 732;
-    static gameSceneWidth = 25000;
-    static gameSceneHeight = 25000;
-    static foodMass = 25000;
+    static gameSceneWidth = 20000;
+    static gameSceneHeight = 20000;
+    static foodMass = 20000;
     static food2xChance = 0.05;
     static botNumber = 15;
     static botDistAtackEater = 800;

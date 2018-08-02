@@ -6,13 +6,22 @@ declare class Menu {
     show(): void;
     hide(): void;
 }
+declare class GameOverMenu extends Menu {
+    score: number;
+    restartBut: HTMLElement;
+    scoreField: HTMLSpanElement;
+    Scene: SceneGame;
+    constructor(score: number, Scene: SceneGame);
+    show(): void;
+    clickReStartBut(): void;
+}
 declare class MainMenu extends Menu {
     startBut: HTMLElement;
     FieldNickName: HTMLInputElement;
     sceneBackWidth: number;
     sceneBackHeight: number;
     sceneBackFoodMass: number;
-    constructor(container: HTMLElement);
+    constructor();
     show(): void;
     private clickStartBut();
 }
