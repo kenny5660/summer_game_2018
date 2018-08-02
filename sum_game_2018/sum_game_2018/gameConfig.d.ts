@@ -10,6 +10,9 @@ declare class GameConfig {
     static eaterAccelerateSpeedLoseSizeCoef: number;
     static eaterSizeTextFont: string;
     static eaterSizeTextFontSizeCoef: number;
+    static eaterSizeTextNickNameCoef: number;
+    static eaterPointTextSize: Point;
+    static eaterPointTextNickName: Point;
     static eaterSizeTextFontColor: string;
     static eaterCoefSpeedLoseSize: number;
     static foodSize: number;

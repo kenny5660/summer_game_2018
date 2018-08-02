@@ -90,6 +90,7 @@
     <Content Include="InputTextGradient.css" />
     <TypeScriptCompile Include="Key.enum.ts" />
     <TypeScriptCompile Include="GUI.ts" />
+    <Content Include="mainMenu.css" />
     <TypeScriptCompile Include="Scene.ts" />
   </ItemGroup>
   <ItemGroup>

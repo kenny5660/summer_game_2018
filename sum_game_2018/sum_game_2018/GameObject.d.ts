@@ -43,7 +43,9 @@ declare class Bot extends Eater {
     Update(dT: number): void;
 }
 declare class Player extends Eater {
-    constructor(Scene: SceneGame, pos: Point, Color: string);
+    nickName: string;
+    constructor(Scene: SceneGame, pos: Point, Color: string, nickName: string);
+    Draw(ctx: CanvasRenderingContext2D): void;
     private touchStart(e);
     private touchCancel(e);
     private touchMove(e);

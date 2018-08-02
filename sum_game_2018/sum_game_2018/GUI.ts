@@ -21,7 +21,8 @@ class MainMenu extends Menu {
         this.container = container;
         this.startBut = document.getElementById("start_button");
         this.FieldNickName = <HTMLInputElement>document.getElementById("textFieldNickName");
-        this.startBut.addEventListener("click", (e: Event) => this.clickStartBut());
+        var input = this;
+        this.startBut.addEventListener("click", (e: Event) => input.clickStartBut());
     }
     show() {
         var gameScene = new SceneBackMainMenu(GameEngine.Canvas, this.sceneBackWidth, this.sceneBackHeight, this.sceneBackFoodMass, "white");
@@ -29,7 +30,7 @@ class MainMenu extends Menu {
         super.show();
     }
     private clickStartBut() {
-        var gameScene = new SceneGame(GameEngine.Canvas, GameConfig.gameSceneWidth, GameConfig.gameSceneHeight, GameConfig.foodMass, "white");
+        var gameScene = new SceneGame(GameEngine.Canvas, GameConfig.gameSceneWidth, GameConfig.gameSceneHeight, GameConfig.foodMass, this.FieldNickName.value, "white");
         GameEngine.changeScene(gameScene);
         this.hide();
     }
@@ -37,7 +38,7 @@ class MainMenu extends Menu {
 class SceneBackMainMenu extends SceneGame {
     mainBot: Bot;
     constructor(canvas: HTMLCanvasElement, width: number, height: number, foodMassFirst: number, backgroundColor: string | CanvasPattern) {
-        super(canvas, width, height, foodMassFirst,backgroundColor);
+        super(canvas, width, height, foodMassFirst,"",backgroundColor);
     }
 
     generateEaters() {

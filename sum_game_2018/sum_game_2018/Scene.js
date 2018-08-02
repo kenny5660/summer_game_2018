@@ -68,7 +68,7 @@ var Scene = /** @class */ (function () {
 }());
 var SceneGame = /** @class */ (function (_super) {
     __extends(SceneGame, _super);
-    function SceneGame(canvas, width, height, foodMassFirst, backgroundColor) {
+    function SceneGame(canvas, width, height, foodMassFirst, nickName, backgroundColor) {
         var _this = this;
         var gameCamera = new Camera(canvas, new Point(0, 0), GameConfig.canvasWidthDefault, GameConfig.canvasHeghtDefault);
         _this = _super.call(this, canvas, gameCamera, backgroundColor) || this;
@@ -78,6 +78,7 @@ var SceneGame = /** @class */ (function (_super) {
         _this.height = height;
         _this.foodMassFirst = foodMassFirst;
         _this.foodMass = _this.foodMassFirst;
+        _this.nickName = nickName;
         _this.generateEaters();
         _this.generateFood();
         return _this;
@@ -112,7 +113,7 @@ var SceneGame = /** @class */ (function (_super) {
         }
     };
     SceneGame.prototype.generateEaters = function () {
-        this.player = new Player(this, new Point(Math.abs(Math.random() * this.width), Math.abs(Math.random() * this.height)), "green");
+        this.player = new Player(this, new Point(Math.abs(Math.random() * this.width), Math.abs(Math.random() * this.height)), "green", this.nickName);
         this.foodMass -= this.player.Size;
         this.eaters.push(this.player);
         for (var i = 0; i < GameConfig.botNumber; ++i) {

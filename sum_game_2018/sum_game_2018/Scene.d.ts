@@ -26,8 +26,9 @@ declare class SceneGame extends Scene {
     height: number;
     foodMass: number;
     foodMassFirst: number;
+    nickName: string;
     protected player: Player;
-    constructor(canvas: HTMLCanvasElement, width: number, height: number, foodMassFirst: number, backgroundColor: string | CanvasPattern);
+    constructor(canvas: HTMLCanvasElement, width: number, height: number, foodMassFirst: number, nickName: string, backgroundColor: string | CanvasPattern);
     restart(): void;
     UpdateObjects(dT: number): void;
     DrawObjects(): void;

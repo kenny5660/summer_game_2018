@@ -73,9 +73,10 @@ class SceneGame extends Scene {
     height: number;
     foodMass: number;
     foodMassFirst: number;
+    nickName: string
     protected player: Player;
 
-    constructor(canvas: HTMLCanvasElement, width: number, height: number, foodMassFirst: number, backgroundColor: string | CanvasPattern) {
+    constructor(canvas: HTMLCanvasElement, width: number, height: number, foodMassFirst: number, nickName: string, backgroundColor: string | CanvasPattern) {
         var gameCamera = new Camera(canvas, new Point(0, 0), GameConfig.canvasWidthDefault, GameConfig.canvasHeghtDefault);
         super(canvas, gameCamera, backgroundColor);
         this.eaters = [];
@@ -84,8 +85,10 @@ class SceneGame extends Scene {
         this.height = height;
         this.foodMassFirst = foodMassFirst;
         this.foodMass = this.foodMassFirst;
+        this.nickName = nickName;
         this.generateEaters();
         this.generateFood();
+  
     }
      restart() {
         this.eaters.splice(0, this.eaters.length);
@@ -123,7 +126,7 @@ class SceneGame extends Scene {
     }
 
     protected generateEaters() {
-        this.player = new Player(this, new Point(Math.abs(Math.random() * this.width), Math.abs(Math.random() * this.height)), "green");
+        this.player = new Player(this, new Point(Math.abs(Math.random() * this.width), Math.abs(Math.random() * this.height)), "green", this.nickName);
         this.foodMass -= this.player.Size;
         this.eaters.push(this.player);
 

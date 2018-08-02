@@ -34,7 +34,8 @@ var MainMenu = /** @class */ (function (_super) {
         _this.container = container;
         _this.startBut = document.getElementById("start_button");
         _this.FieldNickName = document.getElementById("textFieldNickName");
-        _this.startBut.addEventListener("click", function (e) { return _this.clickStartBut(); });
+        var input = _this;
+        _this.startBut.addEventListener("click", function (e) { return input.clickStartBut(); });
         return _this;
     }
     MainMenu.prototype.show = function () {
@@ -43,7 +44,7 @@ var MainMenu = /** @class */ (function (_super) {
         _super.prototype.show.call(this);
     };
     MainMenu.prototype.clickStartBut = function () {
-        var gameScene = new SceneGame(GameEngine.Canvas, GameConfig.gameSceneWidth, GameConfig.gameSceneHeight, GameConfig.foodMass, "white");
+        var gameScene = new SceneGame(GameEngine.Canvas, GameConfig.gameSceneWidth, GameConfig.gameSceneHeight, GameConfig.foodMass, this.FieldNickName.value, "white");
         GameEngine.changeScene(gameScene);
         this.hide();
     };
@@ -52,7 +53,7 @@ var MainMenu = /** @class */ (function (_super) {
 var SceneBackMainMenu = /** @class */ (function (_super) {
     __extends(SceneBackMainMenu, _super);
     function SceneBackMainMenu(canvas, width, height, foodMassFirst, backgroundColor) {
-        return _super.call(this, canvas, width, height, foodMassFirst, backgroundColor) || this;
+        return _super.call(this, canvas, width, height, foodMassFirst, "", backgroundColor) || this;
     }
     SceneBackMainMenu.prototype.generateEaters = function () {
         this.mainBot = new Bot(this, new Point(Math.abs(Math.random() * this.width), Math.abs(Math.random() * this.height)), "red");

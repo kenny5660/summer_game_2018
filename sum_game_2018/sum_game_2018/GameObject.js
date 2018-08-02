@@ -91,7 +91,7 @@ var Eater = /** @class */ (function (_super) {
         ctx.font = Math.floor(this.Size * GameConfig.eaterSizeTextFontSizeCoef * Point.globalScale) + "px " + GameConfig.eaterSizeTextFont;
         ctx.textAlign = "middle";
         ctx.fillStyle = GameConfig.eaterSizeTextFontColor;
-        var posText = new Point(this.pos.toCanvas_Point().X - ctx.measureText(Math.floor(this.Size).toString()).width / 2, this.pos.toCanvas_Point().Y + Math.floor(this.Size * GameConfig.eaterSizeTextFontSizeCoef * Point.globalScale) / 2);
+        var posText = new Point(this.pos.toCanvas_Point().X - ctx.measureText(Math.floor(this.Size).toString()).width / 2 + GameConfig.eaterPointTextSize.X, this.pos.toCanvas_Point().Y + Math.floor(this.Size * GameConfig.eaterSizeTextFontSizeCoef * Point.globalScale) / 2 + GameConfig.eaterPointTextSize.Y);
         ctx.fillText(Math.floor(this.Size).toString(), posText.X, posText.Y);
     };
     Eater.prototype.Update = function (dT) {
@@ -172,8 +172,9 @@ var Bot = /** @class */ (function (_super) {
 }(Eater));
 var Player = /** @class */ (function (_super) {
     __extends(Player, _super);
-    function Player(Scene, pos, Color) {
+    function Player(Scene, pos, Color, nickName) {
         var _this = _super.call(this, Scene, pos, Color) || this;
+        _this.nickName = nickName;
         var input = _this;
         addEventListener("keydown", function (e) { return input.keydown(e); });
         addEventListener("keyup", function (e) { return input.keyup(e); });
@@ -185,6 +186,16 @@ var Player = /** @class */ (function (_super) {
         addEventListener("mouseup", function (e) { return input.mouseUp(e); });
         return _this;
     }
+    Player.prototype.Draw = function (ctx) {
+        _super.prototype.Draw.call(this, ctx);
+        var canvasPos = this.pos.toCanvas_Point(); // new Point(this.pos.X * Point.globalScale, this.pos.Y * Point.globalScale);
+        var canvasSize = this.Size * Point.globalScale;
+        ctx.font = Math.floor(this.Size * GameConfig.eaterSizeTextNickNameCoef * Point.globalScale) + "px " + GameConfig.eaterSizeTextFont;
+        ctx.textAlign = "middle";
+        ctx.fillStyle = GameConfig.eaterSizeTextFontColor;
+        var posText = new Point(this.pos.toCanvas_Point().X - ctx.measureText(this.nickName).width * 0.5 + GameConfig.eaterPointTextNickName.X * this.Size / GameConfig.eaterStartSize * Point.globalScale, this.pos.toCanvas_Point().Y + Math.floor(this.Size * GameConfig.eaterSizeTextFontSizeCoef * Point.globalScale) * 0.5 + GameConfig.eaterPointTextNickName.Y * this.Size / GameConfig.eaterStartSize * Point.globalScale);
+        ctx.fillText(this.nickName, posText.X, posText.Y);
+    };
     Player.prototype.touchStart = function (e) {
         this.isAccelerate = e.touches.length > 1;
     };
