@@ -15,6 +15,9 @@
         this._preOrderTravers(this.root, callback);
     }
     private _preOrderTravers(node: KDtreeNode, callback: (obj: GameObject) => void) {
+        if (node == null) {
+            return;
+        }
         callback(node.obj);
         this._preOrderTravers(node.left, callback);
         this._preOrderTravers(node.right, callback);

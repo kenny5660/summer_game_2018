@@ -21,7 +21,7 @@ declare class Scene {
 }
 declare class SceneGame extends Scene {
     eaters: Eater[];
-    foods: Food[];
+    foods: KDtree;
     width: number;
     height: number;
     foodMass: number;

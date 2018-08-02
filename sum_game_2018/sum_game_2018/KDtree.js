@@ -17,6 +17,9 @@ var KDtree = /** @class */ (function () {
         this._preOrderTravers(this.root, callback);
     };
     KDtree.prototype._preOrderTravers = function (node, callback) {
+        if (node == null) {
+            return;
+        }
         callback(node.obj);
         this._preOrderTravers(node.left, callback);
         this._preOrderTravers(node.right, callback);
