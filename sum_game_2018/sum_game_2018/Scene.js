@@ -127,6 +127,9 @@ var SceneGame = /** @class */ (function (_super) {
                 if (Collisions.CircleInCircle(this.eaters[i].pos, this.eaters[i].Size, nearestFood.pos, nearestFood.Size)) {
                     this.eaters[i].Size += nearestFood.Cost;
                     this.foods.deleteNode(nearestFood);
+                    var tempKDtree = new KDtree();
+                    this.foods.preOrderTravers(function (food) { tempKDtree.insert(food); });
+                    this.foods = tempKDtree;
                 }
                 else {
                     break;

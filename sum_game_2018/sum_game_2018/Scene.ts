@@ -141,7 +141,9 @@ class SceneGame extends Scene {
                 if (Collisions.CircleInCircle(this.eaters[i].pos, this.eaters[i].Size, nearestFood.pos, nearestFood.Size)) {
                     this.eaters[i].Size += nearestFood.Cost;
                     this.foods.deleteNode(nearestFood);
-
+                    var tempKDtree = new KDtree();
+                    this.foods.preOrderTravers((food: Food) => { tempKDtree.insert(food); });
+                    this.foods = tempKDtree;
                 }
                 else {
                     break;
