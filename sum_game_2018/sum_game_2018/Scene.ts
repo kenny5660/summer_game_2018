@@ -91,8 +91,8 @@ class SceneGame extends Scene {
   
     }
      restart() {
-        this.eaters.splice(0, this.eaters.length);
-        this.foods.splice(0, this.foods.length);
+         this.eaters.splice(0, this.eaters.length);
+         this.foods.root = null;
 
         this.foodMass = this.foodMassFirst;
         this.generateEaters();
@@ -171,6 +171,7 @@ class SceneGame extends Scene {
                     var tempKDtree = new KDtree();
                     this.foods.preOrderTravers((food: Food) => { tempKDtree.insert(food); });
                     this.foods = tempKDtree;
+                    this.eaterFoodCollision(this.eaters[i], nearestFood);
                 }
                 else {
                     break;

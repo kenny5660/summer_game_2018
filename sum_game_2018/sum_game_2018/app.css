@@ -15,6 +15,7 @@ canvas {
     display: block;
 }
 .gui {
+    display: none;
     position: absolute;
     z-index: 100;
     top: 0px;
