@@ -138,13 +138,7 @@ var Bot = /** @class */ (function (_super) {
                 nearestEater = this.Scene.eaters[i];
             }
         }
-        for (var i = this.Scene.foods.length - 1; i >= 0; --i) {
-            var dist = this.pos.distToPoint(this.Scene.foods[i].pos);
-            if (minDistFood > dist) {
-                minDistFood = dist;
-                nearestFood = this.Scene.foods[i];
-            }
-        }
+        nearestFood = this.Scene.foods.nearest(this);
         if (minDistEater - this.Size / 2 - nearestEater.Size / 2 < GameConfig.botDistAtackEater) {
             if (nearestEater != null) {
                 var eaterVector = new Vector(nearestEater.pos.X, nearestEater.pos.Y);

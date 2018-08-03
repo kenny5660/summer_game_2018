@@ -68,7 +68,7 @@ class Scene {
 }
 class SceneGame extends Scene {
     eaters: Eater[];
-    foods: Food[];
+    foods: KDtree;
     width: number;
     height: number;
     foodMass: number;
@@ -80,7 +80,7 @@ class SceneGame extends Scene {
         var gameCamera = new Camera(canvas, new Point(0, 0), GameConfig.canvasWidthDefault, GameConfig.canvasHeghtDefault);
         super(canvas, gameCamera, backgroundColor);
         this.eaters = [];
-        this.foods = [];
+        this.foods = new KDtree();
         this.width = width;
         this.height = height;
         this.foodMassFirst = foodMassFirst;
@@ -101,9 +101,7 @@ class SceneGame extends Scene {
 
     UpdateObjects(dT: number) {
 
-        for (var i = this.foods.length - 1; i >= 0; --i) {
-            this.foods[i].Update(dT);
-        }
+        this.foods.preOrderTravers((food: Food) => { food.Update(dT); food.Color = "purple";});
         for (var i = this.eaters.length - 1; i >= 0; --i) {
             this.eaters[i].Update(dT);
         }
@@ -117,9 +115,9 @@ class SceneGame extends Scene {
         this.ctx.fillStyle = this.BackgroundColor;
         this.ctx.fillRect(0, 0, this.Canvas.width, this.Canvas.height);
         this.ctx.restore;
-        for (var i = this.foods.length - 1; i >= 0; --i) {
-            this.foods[i].Draw(this.ctx);
-        }
+
+        this.foods.preOrderTravers((food: Food) => food.Draw(this.ctx));
+      
         for (var i = this.eaters.length - 1; i >= 0; --i) {
             this.eaters[i].Draw(this.ctx);
         }
@@ -143,7 +141,7 @@ class SceneGame extends Scene {
         for (; this.foodMass >= 1;) {
 
             var foodSizeDB = Math.abs(Math.random()) < GameConfig.food2xChance ? 2 : 1
-            this.foods.push(new Food(new Point(Math.abs(Math.random() * this.width), Math.abs(Math.random() * this.height)), foodSizeDB * GameConfig.foodSize, GameConfig.foodCost * foodSizeDB, "purple"));
+            this.foods.insert(new Food(new Point(Math.abs(Math.random() * this.width), Math.abs(Math.random() * this.height)), foodSizeDB * GameConfig.foodSize, GameConfig.foodCost * foodSizeDB, "purple"));
             this.foodMass -= GameConfig.foodCost * foodSizeDB;
         }
     }
@@ -164,14 +162,21 @@ class SceneGame extends Scene {
     }
     private collisions() {
         for (var i = this.eaters.length - 1; i >= 0; --i) {
-            for (var j = this.foods.length - 1; j >= 0; --j) {
-                if (Collisions.CircleInCircle(this.eaters[i].pos, this.eaters[i].Size, this.foods[j].pos, this.foods[j].Size)) {
-
-                    this.eaters[i].Size += this.foods[j].Cost;
-                    this.foods.splice(j, 1);
-                    this.eaterFoodCollision(this.eaters[i], this.foods[j]);
+            while (1) {
+                var nearestFood = <Food>(this.foods.nearest(this.eaters[i]));
+                nearestFood.Color = "red";
+                if (Collisions.CircleInCircle(this.eaters[i].pos, this.eaters[i].Size, nearestFood.pos, nearestFood.Size)) {
+                    this.eaters[i].Size += nearestFood.Cost;
+                    this.foods.deleteNode(nearestFood);
+                    var tempKDtree = new KDtree();
+                    this.foods.preOrderTravers((food: Food) => { tempKDtree.insert(food); });
+                    this.foods = tempKDtree;
+                }
+                else {
+                    break;
                 }
             }
+            
             for (var j = this.eaters.length - 1; j >= 0; --j) {
                 if (i != j) {
                     if (Collisions.CircleInCircle(this.eaters[i].pos, this.eaters[i].Size, this.eaters[j].pos, this.eaters[j].Size)) {
