@@ -82,7 +82,7 @@ var SceneGame = /** @class */ (function (_super) {
         return _this;
     }
     SceneGame.prototype.UpdateObjects = function (dT) {
-        this.foods.preOrderTravers(function (food) { return food.Update(dT); });
+        this.foods.preOrderTravers(function (food) { food.Update(dT); food.Color = "purple"; });
         for (var i = this.eaters.length - 1; i >= 0; --i) {
             this.eaters[i].Update(dT);
         }
@@ -121,10 +121,16 @@ var SceneGame = /** @class */ (function (_super) {
     };
     SceneGame.prototype.collisions = function () {
         for (var i = this.eaters.length - 1; i >= 0; --i) {
-            var nearestFood = (this.foods.nearest(this.eaters[i]));
-            if (Collisions.CircleInCircle(this.eaters[i].pos, this.eaters[i].Size, nearestFood.pos, nearestFood.Size)) {
-                this.eaters[i].Size += nearestFood.Cost;
-                this.foods.deleteNode(nearestFood);
+            while (1) {
+                var nearestFood = (this.foods.nearest(this.eaters[i]));
+                nearestFood.Color = "red";
+                if (Collisions.CircleInCircle(this.eaters[i].pos, this.eaters[i].Size, nearestFood.pos, nearestFood.Size)) {
+                    this.eaters[i].Size += nearestFood.Cost;
+                    this.foods.deleteNode(nearestFood);
+                }
+                else {
+                    break;
+                }
             }
             for (var j = this.eaters.length - 1; j >= 0; --j) {
                 if (i != j) {

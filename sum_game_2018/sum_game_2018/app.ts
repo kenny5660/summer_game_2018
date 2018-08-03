@@ -6,13 +6,14 @@ function ready() {
 
     var foodKDtree = new KDtree();
     var firstFood = new Food(new Point(30, 40), 10, 10, "red");
+    var thirdFood = new Food(new Point(70, 70), 10, 10, "red");
     foodKDtree.insert(firstFood);
     foodKDtree.insert(new Food(new Point(5, 25), 10, 10, "red"));
-    foodKDtree.insert(new Food(new Point(70, 70), 10, 10, "red"));
+    foodKDtree.insert(thirdFood);
     foodKDtree.insert(new Food(new Point(10, 12), 10, 10, "red"));
     foodKDtree.insert(new Food(new Point(50, 30), 10, 10, "red"));
     foodKDtree.insert(new Food(new Point(35, 45), 10, 10, "red"));
-   // foodKDtree.deleteNode(firstFood);
+    foodKDtree.deleteNode(thirdFood);
     var foodNEarest = foodKDtree.nearest(new Food(new Point(20, 20), 10, 10, "red"));
     Game.Start(canvas);
 }

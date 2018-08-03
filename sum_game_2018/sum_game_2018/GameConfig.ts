@@ -13,12 +13,12 @@
     static eaterSizeTextFontColor = "white";
     static eaterCoefSpeedLoseSize = 0.003;//
     static foodSize = 10;
-    static foodCost = 1.5;
+    static foodCost = 1;
     static canvasWidthDefault = 1536;
     static canvasHeghtDefault = 732;
-    static gameSceneWidth = 500;
-    static gameSceneHeight = 500;
-    static foodMass = 100;
+    static gameSceneWidth = 700;
+    static gameSceneHeight = 700;
+    static foodMass = 65;
     static food2xChance = 0.05;
     static botNumber = 0;
     static botDistAtackEater = 1000;

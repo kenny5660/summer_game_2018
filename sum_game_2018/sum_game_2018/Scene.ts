@@ -88,7 +88,7 @@ class SceneGame extends Scene {
 
     UpdateObjects(dT: number) {
 
-        this.foods.preOrderTravers((food: Food) => food.Update(dT));
+        this.foods.preOrderTravers((food: Food) => { food.Update(dT); food.Color = "purple";});
         for (var i = this.eaters.length - 1; i >= 0; --i) {
             this.eaters[i].Update(dT);
         }
@@ -135,11 +135,18 @@ class SceneGame extends Scene {
 
     private collisions() {
         for (var i = this.eaters.length - 1; i >= 0; --i) {
-            var nearestFood = <Food>(this.foods.nearest(this.eaters[i]));
-            if (Collisions.CircleInCircle(this.eaters[i].pos, this.eaters[i].Size, nearestFood.pos, nearestFood.Size)) {
-                this.eaters[i].Size += nearestFood.Cost;
-                this.foods.deleteNode(nearestFood);
+            while (1) {
+                var nearestFood = <Food>(this.foods.nearest(this.eaters[i]));
+                nearestFood.Color = "red";
+                if (Collisions.CircleInCircle(this.eaters[i].pos, this.eaters[i].Size, nearestFood.pos, nearestFood.Size)) {
+                    this.eaters[i].Size += nearestFood.Cost;
+                    this.foods.deleteNode(nearestFood);
+
                 }
+                else {
+                    break;
+                }
+            }
             
             for (var j = this.eaters.length - 1; j >= 0; --j) {
                 if (i != j) {
