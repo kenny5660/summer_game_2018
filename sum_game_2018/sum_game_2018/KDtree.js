@@ -1,4 +1,4 @@
-var KDtree = /** @class */ (function () {
+var KDtree = (function () {
     function KDtree() {
         this.root = null;
     }
@@ -73,9 +73,7 @@ var KDtree = /** @class */ (function () {
         }
         var curD = depth % 2;
         if (node.obj == obj) {
-            // 2.b) If right child is not NULL
             if (node.right != null) {
-                // Find minimum of root's dimension in right subtree
                 var min = this._findMin(node.right, curD, 0);
                 if (curD == 0) {
                     console.log("minNode:%d", min.obj.pos.X);
@@ -83,13 +81,10 @@ var KDtree = /** @class */ (function () {
                 else {
                     console.log("minNode:%d", min.obj.pos.Y);
                 }
-                // Copy the minimum to root
                 node.obj = min.obj;
-                // Recursively delete the minimum
                 node.right = this._del(node.right, min.obj, depth + 1);
             }
-            else if (node.left != null) // same as above
-             {
+            else if (node.left != null) {
                 var min = this._findMin(node.left, curD, 0);
                 node.obj = min.obj;
                 if (curD == 0) {
@@ -101,8 +96,7 @@ var KDtree = /** @class */ (function () {
                 node.right = this._del(node.left, min.obj, depth + 1);
                 node.left = null;
             }
-            else // If node to be deleted is leaf node
-             {
+            else {
                 return null;
             }
             return node;
@@ -193,7 +187,7 @@ var KDtree = /** @class */ (function () {
     };
     return KDtree;
 }());
-var KDtreeNode = /** @class */ (function () {
+var KDtreeNode = (function () {
     function KDtreeNode(obj) {
         this.obj = null;
         this.left = null;
@@ -202,4 +196,3 @@ var KDtreeNode = /** @class */ (function () {
     }
     return KDtreeNode;
 }());
-//# sourceMappingURL=KDtree.js.map

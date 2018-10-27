@@ -1,4 +1,4 @@
-var GameConfig = /** @class */ (function () {
+var GameConfig = (function () {
     function GameConfig() {
     }
     GameConfig.maxCameraPlayerSize = 100;
@@ -16,7 +16,7 @@ var GameConfig = /** @class */ (function () {
     GameConfig.eaterPointTextSize = new Point(0, 0);
     GameConfig.eaterPointTextNickName = new Point(0, -25);
     GameConfig.eaterSizeTextFontColor = "white";
-    GameConfig.eaterCoefSpeedLoseSize = 0.003; //
+    GameConfig.eaterCoefSpeedLoseSize = 0.003;
     GameConfig.foodSize = 10;
     GameConfig.foodCost = 2;
     GameConfig.canvasWidthDefault = 1536;
@@ -31,4 +31,3 @@ var GameConfig = /** @class */ (function () {
     GameConfig.botAngryAccelerateDistCoef = 0.1;
     return GameConfig;
 }());
-//# sourceMappingURL=GameConfig.js.map

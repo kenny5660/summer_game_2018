@@ -8,12 +8,12 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var GUIelement = /** @class */ (function () {
+var GUIelement = (function () {
     function GUIelement() {
     }
     return GUIelement;
 }());
-var Menu = /** @class */ (function () {
+var Menu = (function () {
     function Menu() {
     }
     Menu.prototype.show = function () {
@@ -24,7 +24,7 @@ var Menu = /** @class */ (function () {
     };
     return Menu;
 }());
-var GameOverMenu = /** @class */ (function (_super) {
+var GameOverMenu = (function (_super) {
     __extends(GameOverMenu, _super);
     function GameOverMenu(score, Scene) {
         var _this = _super.call(this) || this;
@@ -47,7 +47,7 @@ var GameOverMenu = /** @class */ (function (_super) {
     };
     return GameOverMenu;
 }(Menu));
-var MainMenu = /** @class */ (function (_super) {
+var MainMenu = (function (_super) {
     __extends(MainMenu, _super);
     function MainMenu() {
         var _this = _super.call(this) || this;
@@ -73,7 +73,7 @@ var MainMenu = /** @class */ (function (_super) {
     };
     return MainMenu;
 }(Menu));
-var SceneBackMainMenu = /** @class */ (function (_super) {
+var SceneBackMainMenu = (function (_super) {
     __extends(SceneBackMainMenu, _super);
     function SceneBackMainMenu(canvas, width, height, foodMassFirst, backgroundColor) {
         return _super.call(this, canvas, width, height, foodMassFirst, "", backgroundColor) || this;
@@ -104,7 +104,7 @@ var SceneBackMainMenu = /** @class */ (function (_super) {
     };
     return SceneBackMainMenu;
 }(SceneGame));
-var MenuButton = /** @class */ (function (_super) {
+var MenuButton = (function (_super) {
     __extends(MenuButton, _super);
     function MenuButton(text, pos) {
         var _this = _super.call(this) || this;
@@ -132,4 +132,3 @@ var MenuButton = /** @class */ (function (_super) {
     };
     return MenuButton;
 }(GameObject));
-//# sourceMappingURL=GUI.js.map

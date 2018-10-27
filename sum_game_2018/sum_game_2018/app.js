@@ -15,7 +15,7 @@ function ready() {
     var foodNEarest = foodKDtree.nearest(new Food(new Point(20, 20), 10, 10, "red"));
     GameEngine.Start(canvas);
 }
-var GameEngine = /** @class */ (function () {
+var GameEngine = (function () {
     function GameEngine() {
     }
     GameEngine.Start = function (canvas) {
@@ -36,7 +36,6 @@ var GameEngine = /** @class */ (function () {
             lastTime = Date.now();
         };
         function drawStuff() {
-            //    Game.CurScene.UpdateObjects(0);
             GameEngine.CurScene.DrawObjects();
         }
         var lastTime = Date.now();
@@ -61,4 +60,3 @@ var GameEngine = /** @class */ (function () {
     };
     return GameEngine;
 }());
-//# sourceMappingURL=app.js.map

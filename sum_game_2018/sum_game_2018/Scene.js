@@ -8,7 +8,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Camera = /** @class */ (function () {
+var Camera = (function () {
     function Camera(canvas, pos, width, height) {
         this.followObject = null;
         this.canvas = canvas;
@@ -44,7 +44,7 @@ var Camera = /** @class */ (function () {
     };
     return Camera;
 }());
-var Scene = /** @class */ (function () {
+var Scene = (function () {
     function Scene(canvas, Camera, backgroundColor) {
         this.GameObjects = [];
         this.Canvas = canvas;
@@ -66,7 +66,7 @@ var Scene = /** @class */ (function () {
     };
     return Scene;
 }());
-var SceneGame = /** @class */ (function (_super) {
+var SceneGame = (function (_super) {
     __extends(SceneGame, _super);
     function SceneGame(canvas, width, height, foodMassFirst, nickName, backgroundColor) {
         var _this = this;
@@ -119,7 +119,6 @@ var SceneGame = /** @class */ (function (_super) {
             this.eaters.push(bot);
         }
         this.Camera.setFollowObject(this.player);
-        // this.Camera.setFollowObject(this.eaters[2]);
     };
     SceneGame.prototype.generateFood = function () {
         for (; this.foodMass >= 1;) {
@@ -138,7 +137,6 @@ var SceneGame = /** @class */ (function (_super) {
     };
     SceneGame.prototype.eaterFoodCollision = function (eater, food) {
         if (eater == this.player) {
-            //game win
         }
         return true;
     };
@@ -183,13 +181,11 @@ var SceneGame = /** @class */ (function (_super) {
     };
     return SceneGame;
 }(Scene));
-var Collisions = /** @class */ (function () {
+var Collisions = (function () {
     function Collisions() {
     }
     Collisions.CircleInCircle = function (posA, rA, posB, rB) {
-        //(x2-x1)^2 + (y1-y2)^2 <= (r1-r2)^2
         return (posA.X - posB.X) * (posA.X - posB.X) + (posA.Y - posB.Y) * (posA.Y - posB.Y) <= (rA - rB) * (rA - rB);
     };
     return Collisions;
 }());
-//# sourceMappingURL=Scene.js.map

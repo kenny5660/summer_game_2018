@@ -9,7 +9,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 function sign(x) { return x ? x < 0 ? -1 : 1 : 0; }
-var Vector = /** @class */ (function () {
+var Vector = (function () {
     function Vector(X, Y) {
         this.X = X;
         this.Y = Y;
@@ -30,7 +30,7 @@ var Vector = /** @class */ (function () {
     };
     return Vector;
 }());
-var Point = /** @class */ (function () {
+var Point = (function () {
     function Point(X, Y) {
         this.X = X;
         this.Y = Y;
@@ -38,9 +38,6 @@ var Point = /** @class */ (function () {
     Point.zoom = function (newScale, scalePoint) {
         var dScale = this.globalScale - newScale;
         this.globalScale = newScale;
-        //this.globalOffset = new Point(
-        //    Math.round((this.globalOffset.X - scalePoint.X) * this.globalScale / (this.globalScale + dScale)) + scalePoint.X,
-        //    Math.round((this.globalOffset.Y - scalePoint.Y) * this.globalScale / (this.globalScale + dScale)) + scalePoint.Y);
     };
     Point.prototype.toWorld_Point = function () {
         var X = (this.X + Point.globalOffset.X) / Point.globalScale;
@@ -59,12 +56,12 @@ var Point = /** @class */ (function () {
     Point.globalScale = 1;
     return Point;
 }());
-var GameObject = /** @class */ (function () {
+var GameObject = (function () {
     function GameObject() {
     }
     return GameObject;
 }());
-var Eater = /** @class */ (function (_super) {
+var Eater = (function (_super) {
     __extends(Eater, _super);
     function Eater(Scene, pos, Color) {
         var _this = _super.call(this) || this;
@@ -81,7 +78,7 @@ var Eater = /** @class */ (function (_super) {
         return _this;
     }
     Eater.prototype.Draw = function (ctx) {
-        var canvasPos = this.pos.toCanvas_Point(); // new Point(this.pos.X * Point.globalScale, this.pos.Y * Point.globalScale);
+        var canvasPos = this.pos.toCanvas_Point();
         var canvasSize = this.Size * Point.globalScale;
         ctx.fillStyle = this.Color;
         ctx.beginPath();
@@ -121,7 +118,7 @@ var Eater = /** @class */ (function (_super) {
     };
     return Eater;
 }(GameObject));
-var Bot = /** @class */ (function (_super) {
+var Bot = (function (_super) {
     __extends(Bot, _super);
     function Bot(Scene, pos, Color) {
         return _super.call(this, Scene, pos, Color) || this;
@@ -164,7 +161,7 @@ var Bot = /** @class */ (function (_super) {
     };
     return Bot;
 }(Eater));
-var Player = /** @class */ (function (_super) {
+var Player = (function (_super) {
     __extends(Player, _super);
     function Player(Scene, pos, Color, nickName) {
         var _this = _super.call(this, Scene, pos, Color) || this;
@@ -182,7 +179,7 @@ var Player = /** @class */ (function (_super) {
     }
     Player.prototype.Draw = function (ctx) {
         _super.prototype.Draw.call(this, ctx);
-        var canvasPos = this.pos.toCanvas_Point(); // new Point(this.pos.X * Point.globalScale, this.pos.Y * Point.globalScale);
+        var canvasPos = this.pos.toCanvas_Point();
         var canvasSize = this.Size * Point.globalScale;
         ctx.font = Math.floor(this.Size * GameConfig.eaterSizeTextNickNameCoef * Point.globalScale) + "px " + GameConfig.eaterSizeTextFont;
         ctx.textAlign = "middle";
@@ -256,7 +253,7 @@ var Player = /** @class */ (function (_super) {
     };
     return Player;
 }(Eater));
-var Food = /** @class */ (function (_super) {
+var Food = (function (_super) {
     __extends(Food, _super);
     function Food(pos, Size, Cost, Color) {
         var _this = _super.call(this) || this;
@@ -279,4 +276,3 @@ var Food = /** @class */ (function (_super) {
     };
     return Food;
 }(GameObject));
-//# sourceMappingURL=GameObject.js.map
